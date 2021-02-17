@@ -4,7 +4,7 @@ from pydantic_models import (UserPost, UserUpdatePassword, #ProductPost,
 validate_model_id,
 validate_model_id_pydantic, TestHere)
 import json
-from models import NotReceived, populate_tables#, Product
+from models import NotReceived, populate_tables, User#, Product
 from app import create_app
 
 from pydantic import ValidationError
@@ -46,9 +46,9 @@ class pydanticTestCase(unittest.TestCase):
 
 	def test_a_1_1_validate_model_id(self):
 		# Model exists
-		self.assertEqual(validate_model_id(Product,1),True)
+		self.assertEqual(validate_model_id(User,1),True)
 		# Model does not exist
-		self.assertEqual(validate_model_id(Product,10000000000),False)
+		self.assertEqual(validate_model_id(User,10000000000),False)
 		try:
 			# model is not model
 			validate_model_id(123,10000000000)
@@ -61,13 +61,13 @@ class pydanticTestCase(unittest.TestCase):
 
 	def test_a_1_2_validate_model_id_pydantic(self):
 		# Model exists: nOo errors raised
-		validate_model_id_pydantic(Product,1)
+		validate_model_id_pydantic(User,1)
 		try:
 			# Model does not exist
-			self.assertEqual(validate_model_id_pydantic(Product,10000000000),False)
+			self.assertEqual(validate_model_id_pydantic(User,10000000000),False)
 			self.assertEqual(True,False)
 		except Exception as e:
-			self.assertEqual(str(e),"there is no Product with this id: 10000000000")
+			self.assertEqual(str(e),"there is no User with this id: 10000000000")
 		try:
 			# model is not model
 			validate_model_id(123,10000000000)
@@ -281,7 +281,7 @@ class pydanticTestCase(unittest.TestCase):
 
 
 
-	def test_b_002_01_1_ProductPost(self):
+	"""def test_b_002_01_1_ProductPost(self):
 		toValidate = {"name":"    123  ","price":789,"in_stock":True}
 		product = ProductPost(**toValidate)
 		#print(product.dict())
@@ -356,7 +356,7 @@ class pydanticTestCase(unittest.TestCase):
 				'ensure this value is less than or equal to 1000000',
 				'type': 'value_error.number.not_le', 'ctx':
 				{'limit_value': 1000000}}])
-		print("Test b_2_1_5:ProductPost:Fail:long name, expensive price")
+		print("Test b_2_1_5:ProductPost:Fail:long name, expensive price")"""
 
 
 
@@ -475,7 +475,7 @@ class pydanticTestCase(unittest.TestCase):
 
 
 
-	def test_b_003_01_1_OrderPost(self):
+	"""def test_b_003_01_1_OrderPost(self):
 		toValidate = {"product_id":"  3   ","amount":"   5 "}
 		order = OrderPost(**toValidate)
 		#print(order.dict())
@@ -634,7 +634,7 @@ class pydanticTestCase(unittest.TestCase):
 			self.assertEqual(json.loads(e.json()),[{'loc': ['amount'], 'msg':
 				'ensure this value is less than 1000', 'type':
 				'value_error.number.not_lt', 'ctx': {'limit_value': 1000}}])
-		print("Test b_3_2_5:OrderUpdate:non existent product id, big amount")
+		print("Test b_3_2_5:OrderUpdate:non existent product id, big amount")"""
 
 
 
