@@ -1,7 +1,8 @@
 import unittest
 from models import (NotReceived, validate_key,
-MyModel, User, Product, Order, #Image,
-	populate_tables, db_drop_and_create_all,get_dict, get_in_stock_products)
+MyModel, User,# Product, Order, #Image,
+	populate_tables, db_drop_and_create_all,get_dict, #get_in_stock_products
+	)
 from app import create_app
 from __init__ import db
 

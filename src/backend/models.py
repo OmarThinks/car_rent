@@ -285,7 +285,7 @@ id,name,price,in_stock,seller_id
 		passive_deletes=False,backref="product")"""
 
 
-	"""orders = db.relationship("Order",backref=backref('product',
+"""orders = db.relationship("Order",backref=backref('product',
 						#uselist=True,
 						#cascade='all,delete-orphan'
 						cascade="all, delete",
