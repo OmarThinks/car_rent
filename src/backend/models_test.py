@@ -524,7 +524,7 @@ class modelsTestCase(unittest.TestCase):
 
 
 
-	def test_a_2_000_product_intro(self):
+	"""def test_a_2_000_product_intro(self):
 		print("")
 		print("")
 		print("_+++++++++++++++++++++++++++++++++_")
@@ -825,7 +825,7 @@ class modelsTestCase(unittest.TestCase):
 		order = Order.query.get(6)
 		product=order.product
 		self.assertEqual(product,Product.query.get(3))
-		print("Test a_3_10:order relationship_product")
+		print("Test a_3_10:order relationship_product")"""
 
 	"""
 	In the update there is no attribute called get_dict
@@ -849,7 +849,7 @@ class modelsTestCase(unittest.TestCase):
 
 		print("Test a_3_11: Order get_dict")"""
 
-	def test_a_3_012_order_relationship_product_delete(self):
+	"""def test_a_3_012_order_relationship_product_delete(self):
 		p_before=len(Product.query.all())
 		#Creating the product to be deleted
 		product_del=Product(name="Spoon",price="5",
@@ -889,7 +889,7 @@ class modelsTestCase(unittest.TestCase):
 			'name': 'Labtop', 'price': 300.0, 'seller_id': 1},
 			'product_id': 1, 'user_id': 1}
 			)
-		print("Test a_3_13: order deep")
+		print("Test a_3_13: order deep")"""
 
 
 	"""def test_a_4_000_image_intro(self):
