@@ -19,12 +19,12 @@ username_con = constr(strip_whitespace=True, min_length=3,max_length=40)
 password_con = constr(strip_whitespace=False, min_length=5,max_length=100)
 
 #Product Name
-product_name_con = constr(strip_whitespace=True, min_length=3,max_length=100)
+"""product_name_con = constr(strip_whitespace=True, min_length=3,max_length=100)
 product_price_con = confloat(ge=.1, le=1000000)
 
 
 # Order
-amount_con = conint(gt=-1, lt=1000)
+amount_con = conint(gt=-1, lt=1000)"""
 
 
 
@@ -120,7 +120,7 @@ class UserUpdatePassword(BaseModel):
 
 
 
-class ProductPost(BaseModel):
+"""class ProductPost(BaseModel):
 	name : product_name_con
 	price : product_price_con
 	in_stock : bool=True
@@ -155,7 +155,7 @@ class OrderPost(BaseModel):
 
 class OrderUpdate(BaseModel):
 	# product id can not be modified
-	amount : amount_con
+	amount : amount_con"""
 
 
 

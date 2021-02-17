@@ -1,9 +1,10 @@
 import unittest
-from pydantic_models import (UserPost, UserUpdatePassword, ProductPost,
-OrderPost, OrderUpdate,	validate_model_id,
+from pydantic_models import (UserPost, UserUpdatePassword, #ProductPost,
+#OrderPost, OrderUpdate,
+validate_model_id,
 validate_model_id_pydantic, TestHere)
 import json
-from models import NotReceived, Product, populate_tables
+from models import NotReceived, populate_tables#, Product
 from app import create_app
 
 from pydantic import ValidationError

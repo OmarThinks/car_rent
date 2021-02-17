@@ -13,7 +13,8 @@ from models import (NotReceived, User, #Product, Order, #Image,
 from auth import (requires_auth)
 from flask_cors import CORS
 from pydantic_models import (validate_model_id, validate_model_id_pydantic,
-UserPost, UserUpdatePassword, ProductPost, OrderPost, OrderUpdate)
+UserPost, UserUpdatePassword#, ProductPost, OrderPost, OrderUpdate
+)
 from flask_pydantic import validate
 
 
