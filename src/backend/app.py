@@ -1,68 +1,26 @@
 TESTING=True
 """
-IMORTANT:
 TESTING=False 	IN CASE OF PRODUCTION
 TESTING=True 	IN CASE OF TESTING
 """
-import os
-import string
-import secrets
-from flask import (Flask, 
-	request, abort, jsonify, Response,render_template, make_response)
-from flask_cors import CORS
-from flask_migrate import Migrate 
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from random import shuffle
-import json
-from random import shuffle
-
-
-
-
-try:
-	from __init__ import *
-except:
-	from src import *
-
+import secrets
+import os
+from __init__ import db, SECRET
+from models import (NotReceived, User, Product, Order, #Image,
+	db_drop_and_create_all, populate_tables)
+from auth import (requires_auth)
+from flask_cors import CORS
+from pydantic_models import (validate_model_id, validate_model_id_pydantic,
+UserPost, UserUpdatePassword, ProductPost, OrderPost, OrderUpdate)
+from flask_pydantic import validate
 
 
 if "SECRET" in os.environ:
 	SECRET = os.environ["SECRET"]
 
 
-MAX_IMAGE_LETTERS=250000
-
-
-
-"""
-try:
-	from .auth import *
-	from .models import *
-	from .functions import *
-except:
-	from __init__ import *
-	from auth import *
-	from models import *
-	from functions import *
-"""
-
-
-
-#SECRET=secrets.token_urlsafe(4)
-#SECRET="abc"
-#print(SECRET,flush=True)
-#SECRET="ABCDEFGHIGKJKFDTGAYAJHGJHSAYTF"
-"""
-endpoints:
-	1)	"/clear_tables"-------->"GET" , "OPTIONS"
-	2)	"/populate" ->--------->"GET" , "OPTIONS"
-	3)	"/user"		----------->"POST", "DELETE"
-	3)	"/products"	->--------->"GET" , "POST" , "OPTIONS"
-	4)	"/products/product_id"->"DELETE" , "PUT" , "OPTIONS"
-	5)	"/orders"	->--------->"GET" , "POST" , "OPTIONS"
-	6)	"/orders/product_id"--->"DELETE" , "PUT" , "OPTIONS"
-
-"""
 
 
 class config:
@@ -70,43 +28,30 @@ class config:
 	SECRET_KEY=secrets.token_urlsafe(5000)
 	basedir = os.path.abspath(os.path.dirname(__file__))
 	DEBUG = False
-	SQLALCHEMY_DATABASE_URI = "sqlite:///{}".format(
-		os.path.join(os.path.dirname(os.path.abspath(__file__)), "databases/database.sqlite"))
+	SQLALCHEMY_DATABASE_URI = "sqlite:///databases/database.sqlite"
 	SQLALCHEMY_TRACK_MODIFICATIONS= False
 
 
 class config_test:
-	#SECRET_KEY=os.urandom(32)
-	SECRET_KEY=secrets.token_urlsafe(5000)
-	basedir = os.path.abspath(os.path.dirname(__file__))
 	DEBUG = True
-	SQLALCHEMY_DATABASE_URI = "sqlite:///{}".format(
-		os.path.join(os.path.dirname(os.path.abspath(__file__)), "databases/test.sqlite"))
-	SQLALCHEMY_TRACK_MODIFICATIONS= False
+	SQLALCHEMY_DATABASE_URI = "sqlite:///databases/test.sqlite"
+
+class config_docker:
+	SQLALCHEMY_DATABASE_URI = "sqlite:////database//database.sqlite"
 
 
 def create_app(DOCKER=False,testing=TESTING):
-	# create and configure the app
-	SECRET
 	app = Flask(__name__)
-	#db=SQLAlchemy(app)
-	if testing:
+	app.config.from_object(config)
+	if TESTING:
 		app.config.from_object(config_test)
-	else:
-		app.config.from_object(config)
-	#print(DOCKER)
 	if DOCKER:
-		app.config["SQLALCHEMY_DATABASE_URI"]=(
-		"sqlite:////database//database.sqlite")
-	#print(SECRET, flush=True)
+		app.config.from_object(config_docker)
+
 	db.app = app
-	migrate = Migrate(app,db)
 	db.init_app(app)
-	try:
-		db.create_all()
-	except:
-		pass
-	#populate_tables()
+	db.create_all()
+
 	CORS(app,resources={r"*":{"origins":"*"}})
 	@app.after_request
 	def after_request(response):
@@ -115,17 +60,56 @@ def create_app(DOCKER=False,testing=TESTING):
 			"Content-Type,Autorization,true")
 		response.headers.add("Access-Control-allow-Methods",
 			"GET,PUT,POST,DELETE,OPTIONS")
-
 		db.session.rollback()
-		#print("roll back", flush=True)
 		return response
-		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 	@app.route('/r', methods=['GET'])
 	def raised():
-		#raise Exception(jsonify({"success":True}),200)
+		# Testng the ability to raise custom responses
 		abort(make_response(jsonify({"sucess":True}),200))
 		return jsonify({"success":False})
 
@@ -213,7 +197,7 @@ Tests: test_02_populate_test
 	@app.route("/populate", methods=["GET"])
 	def populate_all_tables():
 		test_only()
-		#This endpoint will clear all the data in the database and 
+		#This endpoint will clear all the data in the database and
 		#populate with new data
 		try:
 			populate_tables()
@@ -248,7 +232,7 @@ Tests: test_01_clear_tables
 			token=token,secret=SECRET)
 		#print(token_validation,flush=True)
 		#print("WHO: "+str(token_validation),flush=True)
-		if token_validation["case"]==3:        
+		if token_validation["case"]==3:
 			abort(401)
 		if token_validation["case"]==2:
 			res=jsonify({"success":True})
@@ -284,7 +268,7 @@ Tests: test_01_clear_tables
 			password1 = body.get("password1",None)
 			password2 = body.get("password2",None)
 		except:
-			return my_error(status=400, 
+			return my_error(status=400,
 				description = "there is no request body")
 
 		#Validating inputs one by one
@@ -306,17 +290,17 @@ Tests: test_01_clear_tables
 		#Now we will validate all inputs as a group
 		if val_group["case"] == True:
 			# Success: they pass the conditions
-			username,password1,password2=val_group["result"]		
+			username,password1,password2=val_group["result"]
 		else:
 			# Failure: Something went wrong
 			return val_group["result"]
 		#Now we have username, password1 and password2 as strings
-		
+
 		#validate that the username has no white spaces
 		if " " in username:
 			return my_error(status=422,
 				description="username can not contain white spaces")
-		
+
 		#Validate that this username is unique
 		all_users=User.query.all()
 		all_names=[str(u.username) for u in all_users]
@@ -328,7 +312,7 @@ Tests: test_01_clear_tables
 		if password1!=password2:
 			return my_error(status=422,
 				description="please enter the same password")
-		
+
 		#Create the user
 		new_user = User(username=username, password=password1)
 
@@ -345,7 +329,7 @@ Tests: test_01_clear_tables
 			abort(500)
 
 
-	
+
 
 
 
@@ -369,7 +353,7 @@ Tests: test_01_clear_tables
 				status=user_id_validation["result"]["status"],
 				description=user_id_validation
 				["result"]["description"])
-		 
+
 		#Now, we have "user", this is essential
 
 		try:
@@ -413,7 +397,7 @@ Tests: test_01_clear_tables
 			username = body.get("username",None)
 			password = body.get("password",None)
 		except:
-			return my_error(status=400, 
+			return my_error(status=400,
 				description = "there is no request body")
 
 		#Validating inputs one by one
@@ -431,7 +415,7 @@ Tests: test_01_clear_tables
 		#Now we will validate all inputs as a group
 		if val_group["case"] == True:
 			# Success: they pass the conditions
-			username,password=val_group["result"]		
+			username,password=val_group["result"]
 		else:
 			# Failure: Something went wrong
 			return val_group["result"]
@@ -444,7 +428,7 @@ Tests: test_01_clear_tables
 		the_user_id="";
 
 		for usr in all_users:
-			if (str(usr.username) == str(username) and 
+			if (str(usr.username) == str(username) and
 				str(usr.password) == str(password)):
 				the_user_id=usr.id # Here we go the user id
 				break
@@ -453,7 +437,7 @@ Tests: test_01_clear_tables
 			return my_error(status=422,
 				description="wrong username or password")
 		#now we have the_user_id as integer
-		
+
 
 		response=auth_cookie_response(
 			response={"success":True,
@@ -497,7 +481,7 @@ Tests: test_01_clear_tables
 			"user_id":1},
 			user_id=1)
 		return response
-	
+
 
 	@app.route("/users/login/expired", methods=["POST"])
 	def login_expired():
@@ -513,7 +497,6 @@ Tests: test_01_clear_tables
 		 value=expired_token["result"],
 			httponly=True, samesite='Lax')
 		return res,200
-	
 
 
 
@@ -522,7 +505,8 @@ Tests: test_01_clear_tables
 
 
 
-		
+
+
 
 
 	"""
@@ -531,7 +515,7 @@ Tests: test_01_clear_tables
 	@app.route("/products", methods=["GET"])
 	def get_products():
 		#print("Cookies: "+str(request.cookies),flush=True)
-	#This endpoint will return all the products		
+	#This endpoint will return all the products
 		#recievng inputs:
 		#in_stock has a fall back value of True (The default)
 		in_stock = request.args.get('in_stock',True)
@@ -547,7 +531,7 @@ Tests: test_01_clear_tables
 		#Now we will validate the in_stock input
 		if in_stock_validation["case"] == True:
 			# Success: True or false
-			in_stock=in_stock_validation["result"]		
+			in_stock=in_stock_validation["result"]
 		else:
 			# Failure: Can't convert to boolean or None (Impossible)
 			return in_stock_validation["result"]
@@ -561,10 +545,10 @@ Tests: test_01_clear_tables
 			products = get_in_stock_products()
 		else:
 			products = Product.query.order_by(Product.id).all()
-		
+
 		to_return=[p.simple() for p in products]
 		return jsonify({"success":True,"products":to_return})
-		
+
 
 	@app.route("/products", methods=["POST"])
 	@requires_auth()
@@ -582,7 +566,7 @@ Tests: test_01_clear_tables
 			in_stock = body.get("in_stock",None)
 			#seller_id = body.get("seller_id",None)
 		except:
-			return my_error(status=400, 
+			return my_error(status=400,
 				description = "there is no request body")
 
 		#Validating inputs one by one
@@ -606,7 +590,7 @@ Tests: test_01_clear_tables
 		#Now we will validate all inputs as a group
 		if val_group["case"] == True:
 			# Success: they pass the conditions
-			name,price,in_stock=val_group["result"]		
+			name,price,in_stock=val_group["result"]
 		else:
 			# Failure: Something went wrong
 			return val_group["result"]
@@ -625,7 +609,7 @@ Tests: test_01_clear_tables
 			return my_error(
 				status=user_id_validation["result"]["status"],
 				description=user_id_validation
-				["result"]["description"])		 
+				["result"]["description"])
 		seller_id = seller.id
 
 		#Create the product
@@ -642,7 +626,7 @@ Tests: test_01_clear_tables
 			abort(500)
 
 
-		
+
 
 
 	@app.route("/products/<int:product_id>", methods=["PUT"])
@@ -664,13 +648,13 @@ Tests: test_01_clear_tables
 			price = body.get("price",None)
 			in_stock = body.get("in_stock",None)
 		except:
-			return my_error(status=400, 
+			return my_error(status=400,
 				description = "there is no request body")
-		
+
 		#There can not be 0 fields to change
 		#There must be at least one input field
 		if (name==None and price==None and in_stock==None):
-			return my_error(status=400, 
+			return my_error(status=400,
 				description = "you must at least enter"
 				" one field to change")
 
@@ -690,7 +674,7 @@ Tests: test_01_clear_tables
 				status=product_id_validation["result"]["status"],
 				description=product_id_validation
 				["result"]["description"])
-		 
+
 		#Now, we have "product", this is essential
 
 		#there will be no None
@@ -701,7 +685,7 @@ Tests: test_01_clear_tables
 		#There are default values
 		#This step can not change it's place because
 		#here we need default values
-		
+
 		name_validation = validate_must(
 			input=name,type="s",input_name_string="name",
 			minimum=3,maximum=150)
@@ -722,7 +706,7 @@ Tests: test_01_clear_tables
 		#Now we will validate all inputs as a group
 		if val_group["case"] == True:
 			# Success: they pass the conditions
-			name,price,in_stock,=val_group["result"]		
+			name,price,in_stock,=val_group["result"]
 		else:
 			# Failure: Something went wrong
 			return val_group["result"]
@@ -749,13 +733,13 @@ Tests: test_01_clear_tables
 			abort(500)
 
 
-		
+
 
 	@app.route("/products/<int:product_id>", methods=["DELETE"])
 	@requires_auth()
 	def delete_products(payload,product_id):
 	#This endpoint will delete an existing product
-		
+
 		products_query=Product.query
 		product_id_validation=validate_model_id(
 			input_id=product_id,model_query=products_query
@@ -771,7 +755,7 @@ Tests: test_01_clear_tables
 				status=product_id_validation["result"]["status"],
 				description=product_id_validation
 				["result"]["description"])
-		 
+
 		#Now, we have "product", this is essential
 
 		#Making sure that this user can delete this product
@@ -807,7 +791,7 @@ Tests: test_01_clear_tables
 
 
 
-		
+
 
 
 
@@ -847,7 +831,7 @@ Tests: test_01_clear_tables
 	@app.route("/orders", methods=["GET"])
 	@requires_auth()
 	def get_orders(payload):
-	#This endpoint will return all the orders		
+	#This endpoint will return all the orders
 
 		user_id=payload["uid"]
 
@@ -858,7 +842,7 @@ Tests: test_01_clear_tables
 		#Now we will validate the user_id input
 		if user_id_validation["case"] == True:
 			# Success: value is integer
-			user_id=user_id_validation["result"]		
+			user_id=user_id_validation["result"]
 		else:
 			# Failure: Can't convert to integer or None
 			return user_id_validation["result"]
@@ -874,7 +858,7 @@ Tests: test_01_clear_tables
 
 		to_return=[o.get_dict() for o in orders]
 		return jsonify({"success":True,"orders":to_return})
-		
+
 
 
 	@app.route("/orders", methods=["POST"])
@@ -891,7 +875,7 @@ Tests: test_01_clear_tables
 			product_id = body.get("product_id",None)
 			amount = body.get("amount",None)
 		except:
-			return my_error(status=400, 
+			return my_error(status=400,
 				description = "there is no request body")
 
 		#Validating inputs one by one
@@ -909,7 +893,7 @@ Tests: test_01_clear_tables
 		#Now we will validate all inputs as a group
 		if val_group["case"] == True:
 			# Success: they pass the conditions
-			amount=val_group["result"][0]		
+			amount=val_group["result"][0]
 		else:
 			# Failure: Something went wrong
 			return val_group["result"]
@@ -930,7 +914,7 @@ Tests: test_01_clear_tables
 				status=product_id_validation["result"]["status"],
 				description=product_id_validation
 				["result"]["description"])
-		 
+
 		product_id = product.id
 		#Now, we have "product_id", this is essential
 
@@ -949,7 +933,7 @@ Tests: test_01_clear_tables
 			abort(500)
 
 
-		
+
 
 
 	@app.route("/orders/<int:order_id>", methods=["PUT"])
@@ -964,13 +948,13 @@ Tests: test_01_clear_tables
 		try:
 			amount = body.get("amount",None)
 		except:
-			return my_error(status=400, 
+			return my_error(status=400,
 				description = "there is no request body")
-		
+
 		#There can not be 0 fields to change
 		#There must be at least one input field
 		if (amount==None):
-			return my_error(status=400, 
+			return my_error(status=400,
 				description = "you must at least enter"
 				" one field to change")
 
@@ -982,7 +966,7 @@ Tests: test_01_clear_tables
 		#Now we will validate all inputs as a group
 		if amount_validation["case"] == True:
 			# Success: they pass the conditions
-			amount=amount_validation["result"]		
+			amount=amount_validation["result"]
 		else:
 			# Failure: Something went wrong
 			return amount_validation["result"]
@@ -1036,13 +1020,13 @@ Tests: test_01_clear_tables
 			abort(500)
 
 
-		
+
 
 	@app.route("/orders/<int:order_id>", methods=["DELETE"])
 	@requires_auth()
 	def delete_orders(payload,order_id):
 	#This endpoint will delete an existing order
-		
+
 		orders_query=Order.query
 		order_id_validation=validate_model_id(
 			input_id=order_id,model_query=orders_query
@@ -1057,7 +1041,7 @@ Tests: test_01_clear_tables
 				status=order_id_validation["result"]["status"],
 				description=order_id_validation
 				["result"]["description"])
-		 
+
 		#Now, we have "order", this is essential
 
 		#Now we validate if the this user can delete the order
@@ -1097,231 +1081,14 @@ Tests: test_01_clear_tables
 
 
 
-	"""
-	 Image endpoints
-
-		1) get images (Of the user)
-		2) Post image
-		3) update image
-		4) delete image
-
-	"""
-
-
-	@app.route("/images", methods=["GET"])
-	@requires_auth()
-	def get_images(payload):
-	#This endpoint will return all the orders
-		seller_id=payload["uid"]
-		#Filtering by user_id
-		images = Image.query.filter(
-			Image.seller_id==seller_id).order_by("id").all()
-		to_return=[i.simple() for i in images]
-		return jsonify({"success":True,"images":to_return})
-
-
-
-	"""
-	img: is the b64 string value of the image
-		Example: "abcd", "abcde==="
-	formatting:string "png", "jpg" or any of the allowed formatting types
-	"""
-	@app.route("/images", methods=["POST"])
-	@requires_auth()
-	def post_images(payload):
-	#This endpoint will add a new image
-	#The data will be sent in 
-		try:
-			body = request.get_json()
-		except:
-			return my_error(status=400,
-				description="request body can not be parsed to json")
-		try:
-			name = body.get("name",None)
-			formatting = body.get("formatting",None)
-			img = body.get("img",None)
-		except:
-			return my_error(status=400, 
-				description = "there is no request body")
-
-		#Validating inputs one by one
-		name_validation = validate_must(
-			input=name,type="s",input_name_string="name",
-			minimum=1,maximum=100)
-		formatting_validation = validate_must(
-			input=formatting,type="frmt",input_name_string="formatting")
-		img_validation = validate_must(
-			input=img,type="b64",input_name_string="img",
-			minimum=4,maximum=MAX_IMAGE_LETTERS)
-
-		#Validating inputs a group
-		val_group=validate_must_group(
-			[name_validation,formatting_validation,img_validation])
-
-		#Now we will validate all inputs as a group
-		if val_group["case"] == True:
-			# Success: they pass the conditions
-			name,formatting,img=val_group["result"]		
-		else:
-			# Failure: Something went wrong
-			return val_group["result"]
-		#Now the inputs name and formatting are validated
-
-		seller_id=payload["uid"]
-		#Now we have seller_id
-		img = b64ToImg(b64String=img,formatting=formatting)
-		#Create the Image
-		new_image = Image(seller_id=seller_id, name=name, 
-        formatting=formatting)
-		#Insert the image in the database
-		try:
-			new_image.insert()
-			return jsonify(
-				{"success":True,"image":new_image.simple(),"img":img})
-		except Exception as e:
-			db.session.rollback()
-			abort(500)
-
-	"""
-	img: is the b64 string value of the image
-		Example: "abcd", "abcde==="
-	formatting:string "png", "jpg" or any of the allowed formatting types
-	"""
-
-	@app.route("/images/<int:image_id>", methods=["PUT"])
-	@requires_auth()
-	def edit_images(payload,image_id):
-	#This endpoint will edit an exiting image
-		try:
-			body = request.get_json()
-		except:
-			return my_error(status=400,
-				description="request body can not be parsed to json")
-		try:
-			name = body.get("name",None)
-			formatting = body.get("formatting",None)
-			img = body.get("img",None)
-		except:
-			return my_error(status=400, 
-				description = "there is no request body")
-
-
-		#There can not be 0 fields to change
-		#There must be at least one input field
-		if (name==None and formatting==None and img==None):
-			return my_error(status=400, 
-				description = "you must at least enter"
-				" one field to change")
-
-		images_query=Image.query
-
-		image_id_validation=validate_model_id(
-			input_id=image_id,model_query=images_query
-			,model_name_string="image")
-		if image_id_validation["case"]==1:
-			#The image exists
-			image=image_id_validation["result"]
-
-		else:
-			#No image with this id, can not convert to int,
-			# or id is missing (Impossible)
-			return my_error(
-				status=image_id_validation["result"]["status"],
-				description=image_id_validation
-				["result"]["description"])
-		 
-		#Now, we have "image", this is essential
-
-		#there will be no None
-		if name == None:name=image.name
-		if formatting == None:formatting=image.formatting
-		if img 	==None : img =""
-		#Now there is no None
-		#There are default values
-		#This step can not change it's place because
-		#here we need default values
-
-		name_validation = validate_must(
-			input=name,type="s",input_name_string="name",
-			minimum=1,maximum=100)
-		formatting_validation = validate_must(
-			input=formatting,type="frmt",input_name_string="formatting")
-		img_validation = validate_must(
-			input=img,type="b64",input_name_string="img",
-			minimum=4,maximum=MAX_IMAGE_LETTERS)
 
-		val_group=validate_must_group(
-			[name_validation,formatting_validation,img_validation])
 
-		#Now we will validate all inputs as a group
-		if val_group["case"] == True:
-			# Success: they pass the conditions
-			name,formatting,img=val_group["result"]		
-		else:
-			# Failure: Something went wrong
-			return val_group["result"]
-		#Now the inputs name and formatting are validated
 
-		#Making sure that this user can change this image
-		if int(image.seller_id) != payload["uid"]:
-			return my_error(
-				status=403,
-				description=
-				"you can not change this image, because"+
-				" you are not the one who created it")
 
-		#Finally: applying changes
-		image.name=name
-		image.formatting=formatting
-		img = b64ToImg(b64String=img,formatting=formatting)
-		try:
-			image.update()
-			return jsonify(
-				{"success":True,"image":image.simple(),"img":img})
-		except Exception as e:
-			db.session.rollback()
-			abort(500)
 
 
-	@app.route("/images/<int:image_id>", methods=["DELETE"])
-	@requires_auth()
-	def delete_images(payload,image_id):
-	#This endpoint will delete an existing image
-		
-		images_query=Image.query
-		image_id_validation=validate_model_id(
-			input_id=image_id,model_query=images_query
-			,model_name_string="image")
-		if image_id_validation["case"]==1:
-			#The image exists
-			image=image_id_validation["result"]
-		else:
-			#No image with this id, can not convert to int,
-			# or id is missing (Impossible)
-			return my_error(
-				status=image_id_validation["result"]["status"],
-				description=image_id_validation
-				["result"]["description"])
-		 
-		#Now, we have "image", this is essential
 
-		#Now we validate if the this user can delete the image
-		if int(image.seller_id) != payload["uid"]:
-			return my_error(
-				status=403,
-				description=
-				"you can not delete this image, because"+
-				" you are not the one who created it")
 
-		try:
-			# Finally, deleting the image itself
-			image.delete()
-			return jsonify(
-				{"success":True,
-				"result":"image deleted successfully"})
-		except Exception as e:
-			db.session.rollback()
-			abort(500)
 
 
 
@@ -1369,119 +1136,6 @@ Tests: test_01_clear_tables
 
 
 
-
-
-
-
-	@app.route("/test_cookies", methods=["DELETE"])
-	def test_cookies_delete():
-		test_only()
-		cookies = request.cookies
-		r=jsonify({"success":True})
-		for co in cookies:
-			r.set_cookie(co,value="",expires=-50)
-		return r
-
-
-
-	@app.route("/test_cookies", methods=["POST"])
-	def test_cookies():
-		test_only()
-	#This endpoint is for testing cookies
-		#res = Flask.make_response(,rv=)
-		#r = Response(
-		#	response=json.dumps({"fail":True,"id":1}),status=302)
-		"""r = app.response_class(
-			response=json.dumps({"fail":True,"id":1}),
-		status=200,mimetype='application/json')
-		#r=Flask.make_response(r,rv=dict)
-		r.set_cookie('HOnly', value='HTTPOnly Cookie',
-			httponly=True, samesite='Lax')
-		r.set_cookie('NotHOnly', value='Not HTTPOnly Cookie',
-			httponly=False, samesite='Lax')
-		#res.body()"""
-		r = jsonify(
-					{"success":True,
-					"result":"setting cookie successfully"})
-		#out.set_cookie('cantiin_user', 'my_value')
-		r.set_cookie('HOnly', value='HTTPOnly Cookieee',
-			httponly=True, samesite='Lax')
-		r.set_cookie('NotHOnly', value='Not HTTPOnly Cookieee',
-			httponly=False, samesite='Lax')
-		return r,200
-
-
-	@app.route("/test_cookies", methods=["GET"])
-	def test_cookies_get():
-		test_only()
-		return jsonify({"success":True,"cookies":request.cookies})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	def return_error(id):
-		if id==1:
-			return jsonify({"success":False,"error":400,
-			"message":"bad request",
-			"details":"missing request body"
-			}),400
-		if id==2:
-			return jsonify({"success":False,"error":400,
-			"message":"bad request",
-			"details":"missing required variables in request body"
-			}),400
-		if id==3:
-			return jsonify({"success":False,"error":422,
-			"message":"unprocessible",
-			"details":"there is a mistake in data types"
-			}),422
-		if id==4:
-			return jsonify({"success":False,"error":422,
-			"message":"unprocessible",
-			"details":"this category id is not in the database"
-			}),422			
-
-		if id==5:
-			return jsonify({"success":False,"error":422,
-			"message":"unprocessible",
-			"details":"this question id is not in the database"
-			}),422			
-
-
-
-	
 
 
 
@@ -1533,8 +1187,8 @@ Tests: test_01_clear_tables
 		if testing == False:
 			abort(404)
 
-	
-	return app	
+
+	return app
 
 if __name__ == '__main__':
 	create_app().run()
