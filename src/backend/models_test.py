@@ -226,7 +226,7 @@ class modelsTestCase(unittest.TestCase):
 		db.session.commit()
 		self.assertEqual(len(User.query.all()),1)
 
-		prod_to_del1 = Product(name = "abc",price=456,seller_id=user_to_del.id)
+		"""prod_to_del1 = Product(name = "abc",price=456,seller_id=user_to_del.id)
 		prod_to_del2 = Product(name = "abcdef",price=4567,seller_id=user_to_del.id)
 		db.session.add_all([prod_to_del1,prod_to_del2])
 		db.session.commit()
@@ -240,7 +240,7 @@ class modelsTestCase(unittest.TestCase):
 			user_id = user_to_del.id,product_id=prod_to_del2.id,amount=5)
 		db.session.add_all([order_to_del1,order_to_del2,order_to_del3])
 		db.session.commit()
-		self.assertEqual(len(Order.query.all()),3)
+		self.assertEqual(len(Order.query.all()),3)"""
 
 		#img_to_delete1=Image(seller_id=1,name="abc",formatting = "png")
 		#img_to_delete2=Image(seller_id=1,name="abce",formatting = "jpg")
@@ -252,16 +252,16 @@ class modelsTestCase(unittest.TestCase):
 
 		#img_to_delete2.delete()
 		#self.assertEqual(len(Image.query.all()),1)
-		order_to_del3.delete()
+		"""order_to_del3.delete()
 		self.assertEqual(len(Order.query.all()),2)
 		prod_to_del2.delete()
 		self.assertEqual(len(Order.query.all()),1)
-		self.assertEqual(len(Product.query.all()),1)
+		self.assertEqual(len(Product.query.all()),1)"""
 		user_to_del.delete()
 		#self.assertEqual(len(Image.query.all()),0)
-		self.assertEqual(len(Order.query.all()),0)
+		"""self.assertEqual(len(Order.query.all()),0)
 		self.assertEqual(len(Product.query.all()),0)
-		self.assertEqual(len(User.query.all()),0)
+		self.assertEqual(len(User.query.all()),0)"""
 
 		print("Test 0a_1_3_1 : MyModel: relationships")
 
@@ -284,16 +284,17 @@ class modelsTestCase(unittest.TestCase):
 		# Creating the user
 		user_to_del = User(username = "abc",password="456")
 		user_to_del.insert()
-		prod = Product(name="789",price=123,seller_id=1)
-		prod.insert()
+		#prod = Product(name="789",price=123,seller_id=1)
+		#prod.insert()
 		self.assertEqual(user_to_del.deep(),
 			{'id': 1, #'images': [],
-			'orders': [], 'products':
-			[{'id': 1, 'in_stock': True, 'name': '789', 'price': 123.0,
-			 'seller_id': 1}], 'username': 'abc'})
-		self.assertEqual(prod.deep(),{'id': 1, 'in_stock': True,
+			#'orders': [], 'products':
+			#[{'id': 1, 'in_stock': True, 'name': '789', 'price': 123.0,
+			# 'seller_id': 1}],
+			 'username': 'abc'})
+		"""self.assertEqual(prod.deep(),{'id': 1, 'in_stock': True,
 			'name': '789', 'orders': [], 'price': 123.0, 'seller':
-			{'id': 1, 'username': 'abc'}, 'seller_id': 1})
+			{'id': 1, 'username': 'abc'}, 'seller_id': 1})"""
 		print("Test 0a_1_5_1 : MyModel: deep")
 
 
@@ -363,7 +364,7 @@ class modelsTestCase(unittest.TestCase):
 		self.assertEqual(user.id,1)
 		self.assertEqual(user.username,"abc")
 		self.assertEqual(user.password,"123456789")
-		for prod in user.products:
+		"""for prod in user.products:
 			self.assertEqual(type(prod.id),int)
 			self.assertEqual(type(prod.price),float)
 			self.assertEqual(type(prod.in_stock),bool)
@@ -372,7 +373,7 @@ class modelsTestCase(unittest.TestCase):
 			self.assertEqual(type(order.id),int)
 			self.assertEqual(type(order.user_id),int)
 			self.assertEqual(type(order.product_id),int)
-			self.assertEqual(type(order.amount),int)
+			self.assertEqual(type(order.amount),int)"""
 		"""for image in user.images:
 			self.assertEqual(type(image.id),int)
 			self.assertEqual(type(image.seller_id),int)
@@ -440,19 +441,19 @@ class modelsTestCase(unittest.TestCase):
 
 	def test_a_1_009_user_relationship_order(self):
 		user = User.query.get(1)
-		orders=user.orders
+		"""orders=user.orders
 		orders_ids=[order.id for order in orders]
 		self.assertEqual(1 in orders_ids,True)
 		self.assertEqual(2 in orders_ids,False)
 		self.assertEqual(3 in orders_ids,False)
-		self.assertEqual(4 in orders_ids,True)
+		self.assertEqual(4 in orders_ids,True)"""
 		print("Test a_1_9:user relationship_order")
 
 	def test_a_1_010_user_delete_relationships(self):
 		#measuring lengths beofre actions
 		users_before = len(User.query.all())
-		products_before = len(Product.query.all())
-		orders_before = len(Order.query.all())
+		#products_before = len(Product.query.all())
+		#orders_before = len(Order.query.all())
 		#images_before = len(Image.query.all())
 
 		#adding a new user
@@ -461,11 +462,10 @@ class modelsTestCase(unittest.TestCase):
 		db.session.commit()
 		self.assertEqual(len(User.query.all()),users_before+1)
 		#adding a new product
-		prod_to_del = Product(name="Labtopppp",
+		"""prod_to_del = Product(name="Labtopppp",
 			price=3000, seller_id=7)
 		db.session.add(prod_to_del)
 		db.session.commit()
-
 
 		self.assertEqual(len(Product.query.all()),products_before+1)
 
@@ -473,7 +473,7 @@ class modelsTestCase(unittest.TestCase):
 		ordr_to_del = Order(user_id=usr_to_del.id, product_id=1, amount=1)
 		db.session.add(ordr_to_del)
 		db.session.commit()
-		self.assertEqual(len(Order.query.all()),orders_before+1)
+		self.assertEqual(len(Order.query.all()),orders_before+1)"""
 
 		#adding a new image
 		#img_to_del = Image(seller_id=usr_to_del.id, name="Labtopfgfgfg",
@@ -485,8 +485,8 @@ class modelsTestCase(unittest.TestCase):
 		#print(usr_to_del.deep())
 		usr_to_del.delete()
 		self.assertEqual(len(User.query.all()),users_before)
-		self.assertEqual(len(Product.query.all()),products_before)
-		self.assertEqual(len(Order.query.all()),orders_before)
+		#self.assertEqual(len(Product.query.all()),products_before)
+		#self.assertEqual(len(Order.query.all()),orders_before)
 		#self.assertEqual(len(Image.query.all()),images_before)
 
 		print("Test a_1_10: user delete relationships")
@@ -496,7 +496,7 @@ class modelsTestCase(unittest.TestCase):
 		usr = User.query.get(6)
 		self.assertEqual(usr.deep(),
 			{'id': 6,
-			'orders': [], 'products': [],
+			#'orders': [], 'products': [],
 			'username': 'water'})
 		print("Test a_1_11: user deep")
 
