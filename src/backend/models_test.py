@@ -195,13 +195,13 @@ class modelsTestCase(unittest.TestCase):
 		self.assertEqual(user.simple(),{"username":"abc","id":None})
 		user.insert()
 		self.assertEqual(user.simple(),{"username":"abc","id":1})
-		prod = Product(name="789",price=123,seller_id=1)
-		self.assertEqual(prod.simple(),{"name":"789","price":123,
-			"seller_id":1,"id":None,"in_stock":None,"seller":None})
-		prod.insert()
-		self.assertEqual(prod.simple(),{"name":"789","price":123,
-			"seller_id":1,"id":1,"in_stock":True})
-		prod.delete()
+		#prod = Product(name="789",price=123,seller_id=1)
+		#self.assertEqual(prod.simple(),{"name":"789","price":123,
+		#	"seller_id":1,"id":None,"in_stock":None,"seller":None})
+		#prod.insert()
+		#self.assertEqual(prod.simple(),{"name":"789","price":123,
+		#	"seller_id":1,"id":1,"in_stock":True})
+		#prod.delete()
 		user.delete()
 		print("Test 0a_1_2_3 : MyModel: success")
 
