@@ -206,8 +206,6 @@ Tests: test_01_clear_tables
 
 
 
-
-
 	@app.route("/users", methods=["POST"])
 	def post_users():
 	#This endpoint will add a new user
