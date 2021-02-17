@@ -236,10 +236,10 @@ class User(db.Model,MyModel):
 
 
 
-	products = db.relationship("Product",cascade="all, delete-orphan",
+	"""products = db.relationship("Product",cascade="all, delete-orphan",
 		passive_deletes=False,backref="seller")
 	orders = db.relationship("Order",cascade="all, delete-orphan",
-		passive_deletes=False,backref="buyer")
+		passive_deletes=False,backref="buyer")"""
 	#images = db.relationship("Image",cascade="all, delete-orphan",
 	#	passive_deletes=False,backref="seller")
 
@@ -252,7 +252,7 @@ Product
 a persistent product entity, extends the base SQLAlchemy Model
 id,name,price,in_stock,seller_id
 '''
-class Product(db.Model, MyModel):
+"""class Product(db.Model, MyModel):
 	__tablename__="product"
 	# Autoincrementing, unique primary key
 	id = db.Column(Integer(), primary_key=True)
@@ -282,7 +282,7 @@ class Product(db.Model, MyModel):
 	# it is an integer
 	# Example: 1, 2 or 3
 	orders = db.relationship("Order",cascade="all, delete-orphan",
-		passive_deletes=False,backref="product")
+		passive_deletes=False,backref="product")"""
 
 
 	"""orders = db.relationship("Order",backref=backref('product',
@@ -306,7 +306,7 @@ class Product(db.Model, MyModel):
 Order:
 id, user_id, product_id, amount
 """
-class Order(db.Model, MyModel):
+"""class Order(db.Model, MyModel):
 	__tablename__="order"
 	# Autoincrementing, unique primary key
 	id = db.Column(Integer(), primary_key=True)
@@ -336,7 +336,7 @@ class Order(db.Model, MyModel):
 	def update(self, **kwargs):
 		MyModel.update(self,**kwargs)
 		if self.amount<= 0:
-			self.delete()
+			self.delete()"""
 
 
 '''
@@ -412,7 +412,7 @@ def populate_tables():
 	db.session.commit()
 
 
-	products = list()
+	"""products = list()
 	products.append(Product(
 		name="Labtop", price=300, seller_id="1"))
 	products.append(Product(
@@ -440,7 +440,7 @@ def populate_tables():
 	orders.append(Order(user_id="3", product_id=5, amount=4))
 
 	db.session.add_all(orders)
-	db.session.commit()
+	db.session.commit()"""
 
 	"""images = list()
 	#id, user, product, amount
@@ -483,10 +483,10 @@ def populate_tables():
 
 
 
-def get_in_stock_products():
+"""def get_in_stock_products():
     products = Product.query.filter(Product.in_stock==True
         ).order_by(Product.id).all()
     toReturn = []
     for product in products:
     	toReturn.append(product.simple())
-    return toReturn
+    return toReturn"""

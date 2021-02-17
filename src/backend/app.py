@@ -114,54 +114,6 @@ def create_app(DOCKER=False,testing=TESTING):
 		return jsonify({"success":False})
 
 
-	@app.route('/', methods=['GET'])
-	def home():
-		return render_template('pages/index.html')
-
-	@app.route('/add-product', methods=['GET'])
-	def add_product():
-		return render_template('pages/add_product.html')
-
-	@app.route('/add-image', methods=['GET'])
-	def add_image():
-		return render_template('pages/add_image.html')
-
-	@app.route('/cart', methods=['GET'])
-	def cart():
-		return render_template('pages/cart.html')
-
-	@app.route('/edit-product', methods=['GET'])
-	def edit_product():
-		return render_template('pages/edit_product.html')
-
-	@app.route('/login', methods=['GET'])
-	def login():
-		return render_template('pages/login.html')
-
-	@app.route('/manage-products', methods=['GET'])
-	def manage_products():
-		return render_template('pages/manage_products.html')
-
-	@app.route('/manage-images', methods=['GET'])
-	def manage_images():
-		return render_template('pages/manage_images.html')
-
-	@app.route('/product', methods=['GET'])
-	def product():
-		return render_template('pages/product.html')
-
-	@app.route('/signup', methods=['GET'])
-	def signup():
-		return render_template('pages/signup.html')
-
-	@app.route('/about', methods=['GET'])
-	def about():
-		return render_template('pages/about.html')
-
-	@app.route('/test', methods=['GET'])
-	def test_template():
-		return render_template('pages/test.html')
-
 
 
 
