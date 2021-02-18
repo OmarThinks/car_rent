@@ -5,7 +5,7 @@ from functools import wraps
 from jose import jwt
 from urllib.request import urlopen
 
-#from functions import *
+from functions import *
 #from app import *
 from datetime import timedelta,date,datetime,time
 import os
@@ -31,7 +31,7 @@ Inputs:
 Outputs:
     -A dictionary:
         - success:  True or False
-        - result:   
+        - result:
             - If suucess=True: The JWT Token
             - If success=False:The error
 """
@@ -42,7 +42,7 @@ def generate_jwt(payload,secret):
         encoded_jwt = jwt.encode(
             payload,secret,algorithm=algorithm)
         return {"success":True,
-        "result":str(encoded_jwt)}        
+        "result":str(encoded_jwt)}
     except Exception as e:
         return{"success":False,"result":e}
 
@@ -58,7 +58,7 @@ Inputs:
 Outputs:
     -A dictionary:
         - success:  True or False
-        - result:   
+        - result:
             - If suucess=True: The Payload as a dictionary
             - If success=False:The error
 """
@@ -85,7 +85,7 @@ def decode_jwt(encoded_jwt,secret):
 def generate_token(user_id,secret=SECRET,
     expiration_delta=EXPIRATION_AFTER,
     issued_at=datetime.now()):
-    
+
     user_id_validation=validate_integer(
     input_integer=user_id,input_name_string="user_id",
     maximum=10000000000000000000000000000000000000000,minimum=1)
@@ -96,7 +96,7 @@ def generate_token(user_id,secret=SECRET,
     #Now we will validate user_id
     if user_id_validation["case"] == 1:
         # Success: they pass the conditions
-        user_id=user_id_validation["result"]       
+        user_id=user_id_validation["result"]
     else:
         # Failure: Something went wrong
         return {"success":False,
@@ -105,7 +105,7 @@ def generate_token(user_id,secret=SECRET,
     #Now we will validate secret
     if secret_validation["case"] == 1:
         # Success: they pass the conditions
-        secret=secret_validation["result"]       
+        secret=secret_validation["result"]
     else:
         # Failure: Something went wrong
         return {"success":False,
@@ -113,7 +113,7 @@ def generate_token(user_id,secret=SECRET,
 
     expiration_datetime=issued_at+expiration_delta
     expiration_epoch=expiration_datetime.timestamp()
-    
+
     payload = { "uid" : user_id , "exp" : expiration_epoch }
     jwt_generated = generate_jwt(payload=payload,secret=secret)
     return jwt_generated
@@ -126,7 +126,7 @@ Inputs:
     - token:    string of the token
     - secret:   string of the secret
 Outputs:
-    - { "case":      1 or 2 or 3, 
+    - { "case":      1 or 2 or 3,
         "token":    string of token to be assigned
         "error":    the error message
         "payload:   the payload of the token"}
@@ -140,11 +140,11 @@ Outputs:
             -   case:3: "" empty string (You must delete the cookie)
         -   "error":
             -   case:1: "" empty string
-            -   case:2: "expired token" 
+            -   case:2: "expired token"
             -   case:3: "error message"
         -   "payload":
             -   case:1: payload
-            -   case:2: expired payload 
+            -   case:2: expired payload
             -   case:3: ""empty string
             -   NOTE:   exp in payload is the old expiration
 
@@ -191,17 +191,17 @@ def validate_token(token,secret):
     #Now we will validate user_id
     if user_id_validation["case"] == 1:
         # Success: they pass the conditions
-        user_id=user_id_validation["result"].id     
+        user_id=user_id_validation["result"].id
     else:
         # Failure: Something went wrong
         return {"case":3,"token":"",
         "error": user_id_validation["result"]["description"],
-        "payload":""}    
+        "payload":""}
 
     #Now we will validate exp
     if exp_validation["case"] == 1:
         # Success: they pass the conditions
-        exp=exp_validation["result"]       
+        exp=exp_validation["result"]
     else:
         # Failure: Something went wrong
         return {"case":3,"token":"",
@@ -246,7 +246,7 @@ def auth_cookie_response(response,user_id,exp=None):
     else:
         response.set_cookie('cantiin',
         value=cookie_value,httponly=True,
-         samesite='Lax',expires=exp) 
+         samesite='Lax',expires=exp)
     return response
 
 
@@ -260,7 +260,7 @@ def cookie_auth():
     token_validation = validate_token(token=token,secret=SECRET)
     #print(token_validation["case"],flush=True)
     #print(token_validation,flush=True)
-    if token_validation["case"]==3 or token_validation["case"]==2:        
+    if token_validation["case"]==3 or token_validation["case"]==2:
         abort(401)
     return token_validation["payload"]
 
@@ -278,10 +278,10 @@ def cookie_auth():
 def get_token_auth_cookie():
     """Obtains the Access Token from the Authorization Cookie
     """
-   
+
     auth = request.cookies.get("cantiin", None)
     if not auth:
-        
+
         abort(401)
         raise AuthError({"code": "authorization_cookie_missing",
                         "description":
@@ -398,10 +398,10 @@ class AuthError(Exception):
 def get_token_auth_header():
     """Obtains the Access Token from the Authorization Header
     """
-   
+
     auth = request.headers.get("Authorization", None)
     if not auth:
-        
+
         abort(401)
         raise AuthError({"code": "authorization_header_missing",
                         "description":
@@ -476,7 +476,7 @@ def check_permissions(permission, payload):
     it should validate the claims
     return the decoded payload
 
-    !!NOTE urlopen has a common certificate error described here: 
+    !!NOTE urlopen has a common certificate error described here:
     https://stackoverflow.com/questions/50236117/scraping-ssl-certificate-verify-failed-error-for-http-en-wikipedia-org
 '''
 def verify_decode_jwt(token):
@@ -567,7 +567,7 @@ def requires_auth(permission=''):
             token = get_token_auth_header()
             payload = verify_decode_jwt(token)
             check_permissions(permission, payload)
-            return f(#payload, 
+            return f(#payload,
                 *args, **kwargs)
 
         return wrapper
