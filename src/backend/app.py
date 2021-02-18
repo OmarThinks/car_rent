@@ -3,7 +3,7 @@ TESTING=True
 TESTING=False 	IN CASE OF PRODUCTION
 TESTING=True 	IN CASE OF TESTING
 """
-from flask import (Flask, abort, jsonify)
+from flask import (Flask, abort, jsonify, make_response, request)
 from flask_sqlalchemy import SQLAlchemy
 import secrets
 import os
@@ -207,7 +207,8 @@ Tests: test_01_clear_tables
 
 
 	@app.route("/users", methods=["POST"])
-	def post_users():
+	@validate()
+	def post_users(body:UserPost):
 	#This endpoint will add a new user
 		try:
 			body = request.get_json()
