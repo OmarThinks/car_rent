@@ -144,25 +144,26 @@
 					"name": "post_users",
 					"item": [
 						{
-							"name": "post_user:fail:missing username",
+							"name": "post_user:fail 1",
 							"event": [
 								{
 									"listen": "test",
 									"script": {
 										"exec": [
 											"pm.test(\"output as expected\", function () {\r",
-											"    pm.response.to.have.status(400);\r",
+											"    pm.response.to.have.status(415);\r",
 											"    const responseJson = pm.response.json();\r",
 											"    \r",
-											"    pm.expect(responseJson.success).to.eql(false);\r",
-											"    \r",
-											"    pm.expect(responseJson.description).to.eql(\"username is missing\");\r",
-											"    pm.expect(responseJson.message).to.eql(\"bad request\");\r",
-											"    pm.expect(responseJson.error).to.eql(400);\r",
+											"    pm.expect(responseJson).to.eql(\r",
+											"        \r",
+											"\r",
+											"{\r",
+											"    \"detail\": \"Unsupported media type '' in request. 'application/json' is required.\"\r",
+											"}\r",
 											"\r",
 											"\r",
 											"\r",
-											"});\r",
+											");});\r",
 											""
 										],
 										"type": "text/javascript"
@@ -172,15 +173,6 @@
 							"request": {
 								"method": "POST",
 								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"password1\":\"abc\",\r\n    \"password2\":\"abc\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
 								"url": {
 									"raw": "{{host}}/users",
 									"host": [
