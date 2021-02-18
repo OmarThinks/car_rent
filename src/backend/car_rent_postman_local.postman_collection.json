@@ -150,6 +150,11 @@
 									"listen": "test",
 									"script": {
 										"exec": [
+											"/*\r",
+											"Fail 1:\r",
+											"in this case, there is no request body\r",
+											"*/\r",
+											"\r",
 											"pm.test(\"output as expected\", function () {\r",
 											"    pm.response.to.have.status(415);\r",
 											"    const responseJson = pm.response.json();\r",
@@ -173,6 +178,59 @@
 							"request": {
 								"method": "POST",
 								"header": [],
+								"url": {
+									"raw": "{{host}}/users",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "post_user:fail 2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"output as expected\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"    const responseJson = pm.response.json();\r",
+											"    \r",
+											"    pm.expect(responseJson).to.eql(\r",
+											"        \r",
+											"\r",
+											"{\r",
+											"    \"error\": 400,\r",
+											"    \"message\": \"bad request\",\r",
+											"    \"success\": false\r",
+											"}\r",
+											"\r",
+											"\r",
+											"\r",
+											");});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
 								"url": {
 									"raw": "{{host}}/users",
 									"host": [
