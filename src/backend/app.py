@@ -210,79 +210,15 @@ Tests: test_01_clear_tables
 	@validate()
 	def post_users(body:UserPost):
 	#This endpoint will add a new user
-		return jsonify({"success":True})
-		try:
-			body = request.get_json()
-		except:
-			abort(make_response(jsonify(
-			{"description":"request body can not be parsed to json",
-			"message":"bad request"}),400))
-			#return my_error(status=400,
-			#	description="request body can not be parsed to json")
-		try:
-			username = body.get("username",None)
-			password1 = body.get("password1",None)
-			password2 = body.get("password2",None)
-		except:
-			abort(make_response(jsonify(
-			{"description":"there is no request body",
-			"message":"bad request"}),400))
-			#return my_error(status=400,
-			#	description = "there is no request body")
+		username = body.username
+		password = body.password1
+		#return jsonify({"success":True,
+		#"username":username,"password":password
+		#})
 
-		#Validating inputs one by one
-		username_validation = validate_must(
-			input=username,type="s",input_name_string="username",
-			minimum=2,maximum=150)
-		password1_validation = validate_must(
-			input=password1,type="s",input_name_string="password1",
-			minimum=8,maximum=150)
-		password2_validation = validate_must(
-			input=password2,type="s",input_name_string="password2",
-			minimum=8,maximum=150)
-
-		#Validating inputs a group
-		val_group=validate_must_group(
-			[username_validation,password1_validation
-			,password2_validation])
-
-		#Now we will validate all inputs as a group
-		if val_group["case"] == True:
-			# Success: they pass the conditions
-			username,password1,password2=val_group["result"]
-		else:
-			# Failure: Something went wrong
-			return val_group["result"]
-		#Now we have username, password1 and password2 as strings
-
-		#validate that the username has no white spaces
-		if " " in username:
-			abort(make_response(jsonify(
-			{"description":"username can not contain white spaces",
-			"message":"unprocessible"}),422))
-			#return my_error(status=422,
-			#	description="username can not contain white spaces")
-
-		#Validate that this username is unique
-		all_users=User.query.all()
-		all_names=[str(u.username) for u in all_users]
-		if username in all_names:
-			abort(make_response(jsonify(
-			{"description":"this username already exists",
-			"message":"unprocessible"}),422))
-			#return my_error(status=422,
-			#	description="this username already exists")
-
-		#Validate that these passwords are not the same
-		if password1!=password2:
-			abort(make_response(jsonify(
-			{"description":"please enter the same password",
-			"message":"unprocessible"}),422))
-			#return my_error(status=422,
-			#	description="please enter the same password")
 
 		#Create the user
-		new_user = User(username=username, password=password1)
+		new_user = User(username=username, password=password)
 
 		#Insert the user in the database
 		try:
@@ -293,7 +229,6 @@ Tests: test_01_clear_tables
 			return response
 		except Exception as e:
 			raise(e)
-			db.session.rollback()
 			abort(500)
 
 
