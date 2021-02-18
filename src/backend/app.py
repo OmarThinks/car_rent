@@ -3,7 +3,7 @@ TESTING=True
 TESTING=False 	IN CASE OF PRODUCTION
 TESTING=True 	IN CASE OF TESTING
 """
-from flask import Flask
+from flask import (Flask, abort, jsonify)
 from flask_sqlalchemy import SQLAlchemy
 import secrets
 import os
@@ -212,15 +212,21 @@ Tests: test_01_clear_tables
 		try:
 			body = request.get_json()
 		except:
-			return my_error(status=400,
-				description="request body can not be parsed to json")
+			abort(make_response(jsonify(
+			{"description":"request body can not be parsed to json",
+			"message":"bad request"}),400))
+			#return my_error(status=400,
+			#	description="request body can not be parsed to json")
 		try:
 			username = body.get("username",None)
 			password1 = body.get("password1",None)
 			password2 = body.get("password2",None)
 		except:
-			return my_error(status=400,
-				description = "there is no request body")
+			abort(make_response(jsonify(
+			{"description":"there is no request body",
+			"message":"bad request"}),400))
+			#return my_error(status=400,
+			#	description = "there is no request body")
 
 		#Validating inputs one by one
 		username_validation = validate_must(
@@ -249,20 +255,29 @@ Tests: test_01_clear_tables
 
 		#validate that the username has no white spaces
 		if " " in username:
-			return my_error(status=422,
-				description="username can not contain white spaces")
+			abort(make_response(jsonify(
+			{"description":"username can not contain white spaces",
+			"message":"unprocessible"}),422))
+			#return my_error(status=422,
+			#	description="username can not contain white spaces")
 
 		#Validate that this username is unique
 		all_users=User.query.all()
 		all_names=[str(u.username) for u in all_users]
 		if username in all_names:
-			return my_error(status=422,
-				description="this username already exists")
+			abort(make_response(jsonify(
+			{"description":"this username already exists",
+			"message":"unprocessible"}),422))
+			#return my_error(status=422,
+			#	description="this username already exists")
 
 		#Validate that these passwords are not the same
 		if password1!=password2:
-			return my_error(status=422,
-				description="please enter the same password")
+			abort(make_response(jsonify(
+			{"description":"please enter the same password",
+			"message":"unprocessible"}),422))
+			#return my_error(status=422,
+			#	description="please enter the same password")
 
 		#Create the user
 		new_user = User(username=username, password=password1)
@@ -342,14 +357,20 @@ Tests: test_01_clear_tables
 		try:
 			body = request.get_json()
 		except:
-			return my_error(status=400,
-				description="request body can not be parsed to json")
+			abort(make_response(jsonify(
+			{"description":"request body can not be parsed to json",
+			"message":"bad request"}),400))
+			#return my_error(status=400,
+			#	description="request body can not be parsed to json")
 		try:
 			username = body.get("username",None)
 			password = body.get("password",None)
 		except:
-			return my_error(status=400,
-				description = "there is no request body")
+			abort(make_response(jsonify(
+			{"description":"there is no request body",
+			"message":"bad request"}),400))
+			#return my_error(status=400,
+			#	description = "there is no request body")
 
 		#Validating inputs one by one
 		username_validation = validate_must(
@@ -385,8 +406,11 @@ Tests: test_01_clear_tables
 				break
 
 		if the_user_id=="":
-			return my_error(status=422,
-				description="wrong username or password")
+			abort(make_response(jsonify(
+			{"description":"wrong username or password",
+			"message":"unprocessible"}),422))
+			#return my_error(status=422,
+			#	description="wrong username or password")
 		#now we have the_user_id as integer
 
 

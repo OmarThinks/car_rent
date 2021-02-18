@@ -1,6 +1,6 @@
 {
 	"info": {
-		"name": "cantiin_postman_local",
+		"name": "car_rent_postman_local",
 		"description": "A collection to test cantiin api endpoints on the local server.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
