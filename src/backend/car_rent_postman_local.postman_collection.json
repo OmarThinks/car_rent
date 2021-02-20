@@ -344,6 +344,70 @@
 											"    \"success\": true,\r",
 											"    \"user\": {\r",
 											"        \"id\": 7,\r",
+											"        \"username\": \"abcdef\"\r",
+											"    }\r",
+											"}\r",
+											"\r",
+											"\r",
+											"\r",
+											");\r",
+											"\r",
+											"    pm.expect(pm.response.headers.get(\"Authorization\"))\r",
+											"    .to.eql(\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjcsImV4cCI6MTYxNDQzODQ4Mi40MzIyOTJ9.PR4JFaDP3rOXMDbGAdL6GjTLsV7aUH--2P3rEgKpxe4\");\r",
+											"    \r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\":\"abcdef\",\r\n    \"password1\":\"abc123456\",\r\n    \"password2\":\"abc123456\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/users",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "delete_users",
+					"item": [
+						{
+							"name": "post_user:successful",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"output as expected\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    const responseJson = pm.response.json();\r",
+											"    pm.expect(responseJson).to.eql(\r",
+											"        \r",
+											"\r",
+											"{\r",
+											"    \"success\": true,\r",
+											"    \"user\": {\r",
+											"        \"id\": 8,\r",
 											"        \"username\": \"abcdefg\"\r",
 											"    }\r",
 											"}\r",
@@ -352,10 +416,9 @@
 											"\r",
 											");\r",
 											"\r",
-											"    pm.expect(typeof(pm.response.headers.get(\"Authorization\"))).to.eql(typeof(\"abc\"));\r",
+											"    pm.expect(pm.response.headers.get(\"Authorization\"))\r",
+											"    .to.eql(\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjgsImV4cCI6MTYxNDQzODQ4Mi40MzIyOTJ9.hvmn_EVn83ZBwIJxCwy8_sAYx-T4WG5eFsL9437yruI\");\r",
 											"    \r",
-											"    //pm.expect(typeof(responseJson.user[\"id\"])).to.eql(typeof(1));\r",
-											"    //pm.expect(responseJson.user[\"username\"]).to.eql(\"abcdefg\");\r",
 											"});\r",
 											""
 										],
@@ -382,58 +445,6 @@
 									],
 									"path": [
 										"users"
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "delete_users",
-					"item": [
-						{
-							"name": "login_users:success",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"output as expected\", function () {\r",
-											"    pm.response.to.have.status(200);\r",
-											"    const responseJson = pm.response.json();\r",
-											"    \r",
-											"    pm.expect(responseJson.success).to.eql(true);\r",
-											"    \r",
-											"    pm.expect(responseJson.result).to.eql(\"logged in successfully\");\r",
-											"    pm.expect(responseJson.user_id).to.eql(7);\r",
-											"});\r",
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"username\":\"abcdefg\",\r\n    \"password\":\"abc123456\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{host}}/users/login",
-									"host": [
-										"{{host}}"
-									],
-									"path": [
-										"users",
-										"login"
 									]
 								}
 							},

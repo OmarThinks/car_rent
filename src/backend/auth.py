@@ -239,7 +239,8 @@ def auth_cookie_response(response,user_id,exp=None):
     response = jsonify(response)
     cookie_value = generate_token(
         user_id=user_id,secret=SECRET)["result"]
-    if exp==None:
+    response.headers.add("Authorization",cookie_value)
+    """if exp==None:
         response.headers.add('Authorization',cookie_value
         #,httponly=True, samesite='Lax',
         #expires=datetime.now()+EXPIRATION_AFTER
@@ -247,14 +248,16 @@ def auth_cookie_response(response,user_id,exp=None):
     else:
         response.headers.add('Authorization',cookie_value
         #,httponly=True,samesite='Lax',expires=exp
-        )
+        )"""
     return response
 
 def auth_cookie_response_new(response,user_id,exp=None):
     response = jsonify(response)
     cookie_value = generate_token(
         user_id=user_id,secret=SECRET)["result"]
-    if exp==None:
+    response.headers.add("Authorization",cookie_value)
+
+    """if exp==None:
         print("case 1", flush=True)
         response.headers.add("Authorization",cookie_value)
         response.headers.add('Authorization',cookie_value
@@ -265,7 +268,7 @@ def auth_cookie_response_new(response,user_id,exp=None):
         response.headers.add("Authorization",cookie_value)
         response.headers.add('Authorization',cookie_value
         #,httponly=False,samesite='Lax',expires=exp
-        )
+        )"""
     return response
 
 
