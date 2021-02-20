@@ -540,7 +540,7 @@
 					"name": "login_users",
 					"item": [
 						{
-							"name": "login_users:fail:missing username",
+							"name": "login_users:fail:pydantic",
 							"event": [
 								{
 									"listen": "test",
