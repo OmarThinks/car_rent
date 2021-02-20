@@ -249,6 +249,24 @@ def auth_cookie_response(response,user_id,exp=None):
          samesite='Lax',expires=exp)
     return response
 
+def auth_cookie_response_new(response,user_id,exp=None):
+    response = jsonify(response)
+    cookie_value = generate_token(
+        user_id=user_id,secret=SECRET)["result"]
+    if exp==None:
+        print("case 1", flush=True)
+        response.headers.add("Authorization",cookie_value)
+        response.set_cookie('cantiin',
+        value=cookie_value,httponly=False, samesite='Lax',
+        expires=datetime.now()+EXPIRATION_AFTER)
+    else:
+        response.headers.add("Authorization",
+			cookie_value)
+        response.set_cookie('cantiin',
+        value=cookie_value,httponly=False,
+        samesite='Lax',expires=exp)
+    return response
+
 
 
 

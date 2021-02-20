@@ -10,7 +10,8 @@ import os
 from __init__ import db, SECRET
 from models import (NotReceived, User, #Product, Order, #Image,
 	db_drop_and_create_all, populate_tables)
-from auth import (requires_auth, auth_cookie_response)
+from auth import (requires_auth, auth_cookie_response ,
+auth_cookie_response_new)
 from flask_cors import CORS
 from pydantic_models import (validate_model_id, validate_model_id_pydantic,
 UserPost, UserUpdatePassword#, ProductPost, OrderPost, OrderUpdate
@@ -58,9 +59,11 @@ def create_app(DOCKER=False,testing=TESTING):
 	def after_request(response):
 		response.headers.add("Access-Control-allow-Origin","*")
 		response.headers.add("Access-Control-allow-Headers",
-			"Content-Type,Autorization,true")
+			"*,Content-Type,true")
 		response.headers.add("Access-Control-allow-Methods",
 			"GET,PUT,POST,DELETE,OPTIONS")
+		response.headers.add("Access-Control-Expose-Headers",
+			"Authorization,Set-Cookie")
 		db.session.rollback()
 		return response
 
@@ -387,7 +390,7 @@ Tests: test_01_clear_tables
 	def login_test():
 		test_only()
 	#This endpoint will log the user in
-		response=auth_cookie_response(
+		response=auth_cookie_response_new(
 			response={"success":True,
 			"result":"logged in successfully",
 			"user_id":1},
