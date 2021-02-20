@@ -546,19 +546,45 @@
 									"listen": "test",
 									"script": {
 										"exec": [
+											"/*\r",
+											"Fail 1:\r",
+											"in this case, there is no request body\r",
+											"*/\r",
+											"\r",
 											"pm.test(\"output as expected\", function () {\r",
 											"    pm.response.to.have.status(400);\r",
 											"    const responseJson = pm.response.json();\r",
 											"    \r",
-											"    pm.expect(responseJson.success).to.eql(false);\r",
-											"    \r",
-											"    pm.expect(responseJson.description).to.eql(\"username is missing\");\r",
-											"    pm.expect(responseJson.message).to.eql(\"bad request\");\r",
-											"    pm.expect(responseJson.error).to.eql(400);\r",
+											"    pm.expect(responseJson).to.eql(\r",
+											"        \r",
+											"\r",
+											"{\r",
+											"    \"validation_error\": {\r",
+											"        \"body_params\": [\r",
+											"            {\r",
+											"                \"loc\": [\r",
+											"                    \"username\"\r",
+											"                ],\r",
+											"                \"msg\": \"field required\",\r",
+											"                \"type\": \"value_error.missing\"\r",
+											"            },\r",
+											"            {\r",
+											"                \"ctx\": {\r",
+											"                    \"limit_value\": 5\r",
+											"                },\r",
+											"                \"loc\": [\r",
+											"                    \"password\"\r",
+											"                ],\r",
+											"                \"msg\": \"ensure this value has at least 5 characters\",\r",
+											"                \"type\": \"value_error.any_str.min_length\"\r",
+											"            }\r",
+											"        ]\r",
+											"    }\r",
+											"}\r",
 											"\r",
 											"\r",
 											"\r",
-											"});\r",
+											");});\r",
 											""
 										],
 										"type": "text/javascript"
@@ -571,201 +597,6 @@
 								"body": {
 									"mode": "raw",
 									"raw": "{\r\n    \"password\":\"abc\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{host}}/users/login",
-									"host": [
-										"{{host}}"
-									],
-									"path": [
-										"users",
-										"login"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "login_users:fail:missing password",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"output as expected\", function () {\r",
-											"    pm.response.to.have.status(400);\r",
-											"    const responseJson = pm.response.json();\r",
-											"    \r",
-											"    pm.expect(responseJson.success).to.eql(false);\r",
-											"    \r",
-											"    pm.expect(responseJson.description).to.eql(\"password is missing\");\r",
-											"    pm.expect(responseJson.message).to.eql(\"bad request\");\r",
-											"    pm.expect(responseJson.error).to.eql(400);\r",
-											"\r",
-											"\r",
-											"\r",
-											"});\r",
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"username\":\"abc\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{host}}/users/login",
-									"host": [
-										"{{host}}"
-									],
-									"path": [
-										"users",
-										"login"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "login_users:fail:wrong username",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"output as expected\", function () {\r",
-											"    pm.response.to.have.status(422);\r",
-											"    const responseJson = pm.response.json();\r",
-											"    \r",
-											"    pm.expect(responseJson.success).to.eql(false);\r",
-											"    \r",
-											"    pm.expect(responseJson.description).to.eql(\"wrong username or password\");\r",
-											"    pm.expect(responseJson.message).to.eql(\"unprocessible\");\r",
-											"    pm.expect(responseJson.error).to.eql(422);\r",
-											"});\r",
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"username\":\"cooooooooooooooooooool\",\r\n    \"password\":\"freezererer\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{host}}/users/login",
-									"host": [
-										"{{host}}"
-									],
-									"path": [
-										"users",
-										"login"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "login_users:fail:wrong password",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"output as expected\", function () {\r",
-											"    pm.response.to.have.status(422);\r",
-											"    const responseJson = pm.response.json();\r",
-											"    \r",
-											"    pm.expect(responseJson.success).to.eql(false);\r",
-											"    \r",
-											"    pm.expect(responseJson.description).to.eql(\"wrong username or password\");\r",
-											"    pm.expect(responseJson.message).to.eql(\"unprocessible\");\r",
-											"    pm.expect(responseJson.error).to.eql(422);\r",
-											"});\r",
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"username\":\"cool\",\r\n    \"password\":\"freezereredddd\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{host}}/users/login",
-									"host": [
-										"{{host}}"
-									],
-									"path": [
-										"users",
-										"login"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "login_users:fail:wrong password and username",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"output as expected\", function () {\r",
-											"    pm.response.to.have.status(422);\r",
-											"    const responseJson = pm.response.json();\r",
-											"    \r",
-											"    pm.expect(responseJson.success).to.eql(false);\r",
-											"    \r",
-											"    pm.expect(responseJson.description).to.eql(\"wrong username or password\");\r",
-											"    pm.expect(responseJson.message).to.eql(\"unprocessible\");\r",
-											"    pm.expect(responseJson.error).to.eql(422);\r",
-											"});\r",
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"username\":\"abc\",\r\n    \"password\":\"freezererer\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -813,54 +644,6 @@
 								"body": {
 									"mode": "raw",
 									"raw": "{\r\n    \"username\":\"klmn\",\r\n    \"password\":\"fde123987byt\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{host}}/users/login",
-									"host": [
-										"{{host}}"
-									],
-									"path": [
-										"users",
-										"login"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "login_users:fail:attempt poison",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"output as expected\", function () {\r",
-											"    pm.response.to.have.status(422);\r",
-											"    const responseJson = pm.response.json();\r",
-											"    \r",
-											"    pm.expect(responseJson.success).to.eql(false);\r",
-											"    \r",
-											"    pm.expect(responseJson.description).to.eql(\"minimum password length is 8 letters\");\r",
-											"    pm.expect(responseJson.message).to.eql(\"unprocessible\");\r",
-											"    pm.expect(responseJson.error).to.eql(422);\r",
-											"});\r",
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"username\":true,\r\n    \"password\":true\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
