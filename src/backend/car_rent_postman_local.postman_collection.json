@@ -352,7 +352,7 @@
 											"\r",
 											");\r",
 											"\r",
-											"    //pm.expect(responseJson.success).to.eql(true);\r",
+											"    pm.expect(typeof(pm.response.headers.get(\"Authorization\"))).to.eql(typeof(\"abc\"));\r",
 											"    \r",
 											"    //pm.expect(typeof(responseJson.user[\"id\"])).to.eql(typeof(1));\r",
 											"    //pm.expect(responseJson.user[\"username\"]).to.eql(\"abcdefg\");\r",
