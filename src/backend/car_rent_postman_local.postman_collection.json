@@ -684,7 +684,9 @@
 											"    pm.expect(responseJson.success).to.eql(true);\r",
 											"    \r",
 											"    pm.expect(responseJson.result).to.eql(\"logged in successfully\");\r",
-											"    pm.expect(responseJson.user_id).to.eql(1);\r",
+											"    pm.expect(responseJson.user_id).to.eql(3);\r",
+											"    pm.expect(typeof(pm.response.headers.get(\"Authorization\")))\r",
+											"    .to.eql(typeof(\"abc\"));\r",
 											"});\r",
 											""
 										],
@@ -697,7 +699,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"username\":\"abc\",\r\n    \"password\":\"123456789\"\r\n}",
+									"raw": "{\r\n    \"username\":\"klmn\",\r\n    \"password\":\"fde123987byt\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -727,10 +729,17 @@
 											"pm.test(\"output as expected\", function () {\r",
 											"    pm.response.to.have.status(200);\r",
 											"    const responseJson = pm.response.json();\r",
+											"    pm.expect(responseJson).to.eql(\r",
+											"\r",
+											"{\r",
+											"    \"result\": \"logged out successfully\",\r",
+											"    \"success\": true\r",
+											"}    \r",
+											"\r",
+											"    );\r",
+											"    pm.expect((pm.response.headers.get(\"Authorization\")))\r",
+											"    .to.eql((\"\"));\r",
 											"    \r",
-											"    pm.expect(responseJson.success).to.eql(true);\r",
-											"    \r",
-											"    pm.expect(responseJson.result).to.eql(\"logged out successfully\");\r",
 											"});\r",
 											""
 										],

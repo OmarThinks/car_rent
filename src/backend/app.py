@@ -311,11 +311,8 @@ Tests: test_01_clear_tables
 		cookies = request.cookies
 		r=jsonify({"success":True,
 			"result":"logged out successfully"})
-		for co in cookies:
-			r.set_cookie(co,value="",expires=-50)
+		r.headers.add("Authorization","")
 		return r
-		#return jsonify({"success":True,
-		#	"result":"logged out successfully"})
 
 
 
