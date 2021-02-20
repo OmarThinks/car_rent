@@ -295,7 +295,7 @@ Tests: test_01_clear_tables
 	@validate()
 	def login_users(body:UserLogin):
 	#This endpoint will log the user in
-
+		the_user_id = body.password
 		response=auth_cookie_response(
 			response={"success":True,
 			"result":"logged in successfully",
@@ -303,7 +303,6 @@ Tests: test_01_clear_tables
 			user_id=the_user_id)
 		return response
 
-		#return jsonify()
 
 
 	@app.route("/users/logout", methods=["POST"])
