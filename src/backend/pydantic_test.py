@@ -265,17 +265,19 @@ class pydanticTestCase(unittest.TestCase):
 
 
 
-	def test_b_001_01_1_UserPost(self):
-		toValidate = {"username":123,"password1":7890123456,"password2":"7890123456"}
-		user = UserPost(**toValidate)
-		self.assertEqual(user.dict(),{"username":"123","password1":"7890123456",
-			"password2":"7890123456"})
-		print("Test b_1_1_1:UserPost Successful")
 
-	def test_b_001_01_2_UserPost(self):
+
+	def test_b_001_03_1_UserLogin(self):
+		toValidate = {"username":"   abc  ","password":123456789}
+		user = UserLogin(**toValidate)
+		self.assertEqual(user.dict(),
+		{"username":"abc","password":"123456789"})
+		print("Test b_1_3_1:UserLogin Successful")
+
+	def test_b_001_03_2_UserLogin(self):
 		toValidate = {}
 		try:
-			user = UserPost(**toValidate)
+			user = UserLogin(**toValidate)
 			self.assertEqual(True,False)
 		except Exception as e:
 			#print(json.loads(e.json()))
@@ -286,12 +288,12 @@ class pydanticTestCase(unittest.TestCase):
 				},{"loc": ["password2"],"msg": "field required",
 				"type": "value_error.missing"
 				}])
-		print("Test b_1_1_2:UserPost:Fail:all missing required")
+		print("Test b_1_3_2:UserLogin:Fail:all missing required")
 
-	def test_b_001_01_3_UserPost(self):
+	def test_b_001_03_3_UserLogin(self):
 		toValidate = {"password1":{},"username":{},"password2":{}}
 		try:
-			user = UserPost(**toValidate)
+			user = UserLogin(**toValidate)
 			self.assertEqual(True,False)
 		except Exception as e:
 			#print(json.loads(e.json()))
@@ -300,10 +302,10 @@ class pydanticTestCase(unittest.TestCase):
 				"password1"],"msg": "str type expected","type": "type_error.str"
 				},{"loc": ["password2"],"msg": "str type expected",
 				"type": "type_error.str"}])
-		print("Test b_1_1_3:UserPost:Fail:not string")
+		print("Test b_1_3_3:UserLogin:Fail:not string")
 
 
-	def test_b_001_01_4_UserPost(self):
+	def test_b_001_03_4_UserLogin(self):
 		# username contains spaces
 		# password mismatch
 		# passwords lebgth less than 8
@@ -311,7 +313,7 @@ class pydanticTestCase(unittest.TestCase):
 		# because password 1 did not pass the validation
 		toValidate = {"username":"My Name","password1":"123","password2":"789"}
 		try:
-			user = UserPost(**toValidate)
+			user = UserLogin(**toValidate)
 			self.assertEqual(True,False)
 		except Exception as e:
 			# print(json.loads(e.json()))
@@ -324,15 +326,15 @@ class pydanticTestCase(unittest.TestCase):
 				"msg": "ensure this value has at least 5 characters",
 				"type": "value_error.any_str.min_length","ctx": {
 				"limit_value": 5}}])
-		print("Test b_1_1_4:UserPost:Fail:username contains spaces, short password")
+		print("Test b_1_3_4:UserLogin:Fail:username contains spaces, short password")
 
-	def test_b_001_01_5_UserPost(self):
+	def test_b_001_03_5_UserLogin(self):
 		# password mismatch
 		# Username already exists
 		toValidate = {"username":"abc","password1":"123456789999999000000000",
 		"password2":"12345678"}
 		try:
-			user = UserPost(**toValidate)
+			user = UserLogin(**toValidate)
 			self.assertEqual(True,False)
 		except Exception as e:
 			#print(json.loads(e.json()))
@@ -340,9 +342,9 @@ class pydanticTestCase(unittest.TestCase):
 				'loc': ['username'], 'msg': 'this username already exists',
 				'type': 'value_error'}, {'loc': ['password2'], 'msg':
 				'passwords do not match', 'type': 'value_error'}])
-		print("Test b_1_1_5:UserPost:Fail:password mismatch")
+		print("Test b_1_3_5:UserPost:Fail:password mismatch")
 
-	def test_b_001_01_6_UserPost(self):
+	def test_b_001_03_6_UserPost(self):
 		# adding unknown attribute
 		# This attribute will not be returned
 		# Testing White spaces
@@ -351,7 +353,7 @@ class pydanticTestCase(unittest.TestCase):
 		user = UserPost(**toValidate)
 		self.assertEqual(user.dict(),{"username":"MyName","password1":"12345678",
 		"password2":"12345678"})
-		print("Test b_1_1_6:UserPost:Added unknown value:Cleaned")
+		print("Test b_1_3_6:UserPost:Added unknown value:Cleaned")
 
 
 
