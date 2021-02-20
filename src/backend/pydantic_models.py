@@ -100,6 +100,29 @@ class UserPost(BaseModel):
 			raise ValueError('passwords do not match')
 		return value
 
+class UserLogin(BaseModel):
+	username : username_con
+	password : password_con
+
+	@validator('password')
+	def wrong_username_or_password(cls, value, values, **kwargs):
+		username = values["username"]
+		password = value
+		users=User.query.all()
+
+		#Validate that this username and password are correct
+		all_users=User.query.all()
+		the_user_id="";
+
+		for usr in all_users:
+			if (str(usr.username) == str(username) and
+				str(usr.password) == str(password)):
+				the_user_id=usr.id # Here we go the user id
+				break
+		if the_user_id=="":
+			raise ValueError('wrong username or password')
+		return value
+
 
 class UserUpdatePassword(BaseModel):
 	password1 : password_con
