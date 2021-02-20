@@ -6,7 +6,7 @@ import Navbar from "./components/navbar";
 
 class App extends Component {
 
-state = {logged_in:true};
+state = {loggedIn:false};
 
 /*
 This method will change the loggedin state in the app
@@ -15,17 +15,22 @@ true | false
 */
 changeLoggedIn = (newState) =>{
   this.setState(
-    {logged_in:newState}
+    {loggedIn:newState}
   );
 }
 
 
-render = () => {
 
+render = () => {
+  var loggedInMessage = "User is not logged in";
+  if (this.state.loggedIn) {
+    loggedInMessage = "User is logged in";
+  }
   return (
     <div className="App">
-      <p>{this.state.logged_in.toString()}</p>
       <Navbar appState={this.state} />
+      <p>{loggedInMessage}</p>
+      <button onClick={()=>{this.changeLoggedIn(true)}}>Log me in</button>
     </div>
   );}
 }

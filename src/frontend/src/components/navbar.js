@@ -2,21 +2,20 @@ import {Component} from "react";
 
 const Navbar = (props) => {
 
-  //render = () => {
-    const logged_in = props.appState.logged_in;
-    if(logged_in==true){
+    const loggedIn = props.appState.loggedIn;
+    if(loggedIn==true){
       return (
         <div>
-          <p>The user is logged in</p>
+        <button>Log Out</button>
+        <button>Create Account</button>
         </div>
       )
     }
     return (
       <div>
-        <p>The user is not logged in</p>
+      <button>Login</button>
       </div>
     )
-  //}
 }
 
 export default Navbar;
