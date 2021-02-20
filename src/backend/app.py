@@ -13,11 +13,11 @@ from models import (NotReceived, User, #Product, Order, #Image,
 from auth import (requires_auth, auth_cookie_response ,
 auth_cookie_response_new)
 from flask_cors import CORS
-from pydantic_models import (validate_model_id, validate_model_id_pydantic,
+from pydantic_models import (validate_model_id_pydantic,
 UserPost, UserUpdatePassword#, ProductPost, OrderPost, OrderUpdate
 )
 from flask_pydantic import validate
-
+from functions import validate_model_id
 
 if "SECRET" in os.environ:
 	SECRET = os.environ["SECRET"]

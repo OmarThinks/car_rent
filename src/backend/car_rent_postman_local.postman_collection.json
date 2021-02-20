@@ -352,8 +352,8 @@
 											"\r",
 											");\r",
 											"\r",
-											"    pm.expect(pm.response.headers.get(\"Authorization\"))\r",
-											"    .to.eql(\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjcsImV4cCI6MTYxNDQzODQ4Mi40MzIyOTJ9.PR4JFaDP3rOXMDbGAdL6GjTLsV7aUH--2P3rEgKpxe4\");\r",
+											"    pm.expect(typeof(pm.response.headers.get(\"Authorization\")))\r",
+											"    .to.eql(typeof(\"abc\"));\r",
 											"    \r",
 											"});\r",
 											""
@@ -416,8 +416,8 @@
 											"\r",
 											");\r",
 											"\r",
-											"    pm.expect(pm.response.headers.get(\"Authorization\"))\r",
-											"    .to.eql(\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjgsImV4cCI6MTYxNDQzODQ4Mi40MzIyOTJ9.hvmn_EVn83ZBwIJxCwy8_sAYx-T4WG5eFsL9437yruI\");\r",
+											"    pm.expect(typeof(pm.response.headers.get(\"Authorization\")))\r",
+											"    .to.eql(typeof(\"abc\"));\r",
 											"    \r",
 											"});\r",
 											""
@@ -472,7 +472,13 @@
 							],
 							"request": {
 								"method": "DELETE",
-								"header": [],
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjgsImV4cCI6MTYxNDQzODk3OC41MjM1NDF9.6ZJ95vK6frtHa59N2Jpd_az4kZADwRrGgSnbKCT_Yjs",
+										"type": "text"
+									}
+								],
 								"url": {
 									"raw": "{{host}}/users",
 									"host": [
@@ -508,7 +514,13 @@
 							],
 							"request": {
 								"method": "DELETE",
-								"header": [],
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjgsImV4cCI6MTYxNDQzODk3OC41MjM1NDF9.6ZJ95vK6frtHa59N2Jpd_az4kZADwRrGgSnbKCT_Yjs",
+										"type": "text"
+									}
+								],
 								"url": {
 									"raw": "{{host}}/users",
 									"host": [

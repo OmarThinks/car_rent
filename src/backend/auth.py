@@ -12,7 +12,7 @@ import os
 import sys
 import jwt
 import base64
-
+from models import User
 
 try:
     from __init__ import *
