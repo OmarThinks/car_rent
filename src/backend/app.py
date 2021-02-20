@@ -11,7 +11,8 @@ from __init__ import db, SECRET
 from models import (NotReceived, User, #Product, Order, #Image,
 	db_drop_and_create_all, populate_tables)
 from auth import (requires_auth, auth_cookie_response ,
-auth_cookie_response_new, validate_token)
+auth_cookie_response_new, validate_token, generate_token)
+from datetime import timedelta,datetime
 from flask_cors import CORS
 from pydantic_models import (validate_model_id_pydantic,
 UserPost, UserUpdatePassword, UserLogin#, ProductPost, OrderPost, OrderUpdate
@@ -347,16 +348,14 @@ Tests: test_01_clear_tables
 	@app.route("/users/login/expired", methods=["POST"])
 	def login_expired():
 		test_only()
-	#This endpoint will log the user in with expired token
+		#This endpoint will log the user in with expired token
 		res = jsonify(
 					{"success":True,
 					"result":"setting expired token successfully"})
 		expired_token=generate_token(user_id=1,secret=SECRET,
     		expiration_delta=timedelta(days=-7),
     		issued_at=datetime.now())
-		res.set_cookie('cantiin',
-		 value=expired_token["result"],
-			httponly=True, samesite='Lax')
+		res.headers.add('Authorization',expired_token["result"])
 		return res,200
 
 

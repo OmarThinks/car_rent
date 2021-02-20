@@ -976,6 +976,102 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "set expired token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"output as expected\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    const responseJson = pm.response.json();\r",
+											"    pm.expect(responseJson).to.eql(\r",
+											"\r",
+											"{\r",
+											"    \"result\": \"setting expired token successfully\",\r",
+											"    \"success\": true\r",
+											"}   \r",
+											"\r",
+											"    );\r",
+											"    pm.expect(typeof(pm.response.headers.get(\"Authorization\")))\r",
+											"    .to.eql(typeof(\"\"));\r",
+											"    \r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/users/login/expired",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"users",
+										"login",
+										"expired"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "users_who:expired token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"output as expected\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    const responseJson = pm.response.json();\r",
+											"    pm.expect(responseJson).to.eql(\r",
+											"\r",
+											"{\r",
+											"    \"result\": \"refreshed expired token\",\r",
+											"    \"success\": true,\r",
+											"    \"user_id\": 1\r",
+											"}  \r",
+											"\r",
+											"    );\r",
+											"    pm.expect(typeof(pm.response.headers.get(\"Authorization\")))\r",
+											"    .to.eql(typeof(\"\"));\r",
+											"    \r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjEsImV4cCI6MTYxMzI0MzI3NS41NDAzNzR9.-UTW8fgfFYGwL-YLBfqCBGhBzX5WzzLLC6EVHExl1aA",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{host}}/users/who",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"users",
+										"who"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				}
