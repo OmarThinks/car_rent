@@ -1,10 +1,10 @@
 import {Component} from "react";
 
-class Navbar extends Component {
+const Navbar = (props) => {
 
-  render = () => {
-    const logged_in = this.props.logged_in;
-    if(logged_in){
+  //render = () => {
+    const logged_in = props.appState.logged_in;
+    if(logged_in==true){
       return (
         <div>
           <p>The user is logged in</p>
@@ -16,7 +16,7 @@ class Navbar extends Component {
         <p>The user is not logged in</p>
       </div>
     )
-  }
+  //}
 }
 
 export default Navbar;
