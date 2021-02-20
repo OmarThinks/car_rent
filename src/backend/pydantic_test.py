@@ -271,7 +271,7 @@ class pydanticTestCase(unittest.TestCase):
 		toValidate = {"username":"   abc  ","password":123456789}
 		user = UserLogin(**toValidate)
 		self.assertEqual(user.dict(),
-		{"username":"abc","password":"123456789"})
+		{"username":"abc","password":1})
 		print("Test b_1_3_1:UserLogin Successful")
 
 	def test_b_001_03_2_UserLogin(self):
