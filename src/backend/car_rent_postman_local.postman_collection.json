@@ -882,39 +882,7 @@
 					"name": "users_who",
 					"item": [
 						{
-							"name": "delte cookies Copy",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"Status code is 200\", function () {\r",
-											"  pm.response.to.have.status(200);\r",
-											"  const responseJson = pm.response.json();\r",
-											"  pm.expect(responseJson.success).to.eql(true);\r",
-											"});"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"url": {
-									"raw": "{{host}}/test_cookies",
-									"host": [
-										"{{host}}"
-									],
-									"path": [
-										"test_cookies"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "users_who:fail:case:3",
+							"name": "users_who:fail",
 							"event": [
 								{
 									"listen": "test",
@@ -923,82 +891,18 @@
 											"pm.test(\"output as expected\", function () {\r",
 											"    pm.response.to.have.status(401);\r",
 											"    const responseJson = pm.response.json();\r",
+											"    pm.expect(responseJson).to.eql(\r",
+											"\r",
+											"{\r",
+											"    \"error\": 401,\r",
+											"    \"message\": \"unauthorized\",\r",
+											"    \"success\": false\r",
+											"}    \r",
+											"\r",
+											"    );\r",
+											"    pm.expect(typeof(pm.response.headers.get(\"Authorization\")))\r",
+											"    .to.eql(typeof(\"\"));\r",
 											"    \r",
-											"    pm.expect(responseJson.success).to.eql(false);\r",
-											"    pm.expect(responseJson.message).to.eql(\"unauthorized\");\r",
-											"    pm.expect(responseJson.error).to.eql(401);\r",
-											"});"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [],
-								"url": {
-									"raw": "{{host}}/users/who",
-									"host": [
-										"{{host}}"
-									],
-									"path": [
-										"users",
-										"who"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "set expired token",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"Status code is 200\", function () {\r",
-											"  pm.response.to.have.status(200);\r",
-											"  const responseJson = pm.response.json();\r",
-											"  pm.expect(responseJson.success).to.eql(true);\r",
-											"  pm.expect(responseJson.result).to.eql(\r",
-											"      \"setting expired token successfully\");\r",
-											"});"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [],
-								"url": {
-									"raw": "{{host}}/users/login/expired",
-									"host": [
-										"{{host}}"
-									],
-									"path": [
-										"users",
-										"login",
-										"expired"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "users_who:successful:refresh token",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"output as expected\", function () {\r",
-											"    pm.response.to.have.status(200);\r",
-											"    const responseJson = pm.response.json();\r",
-											"    \r",
-											"    pm.expect(responseJson.success).to.eql(true);\r",
-											"    pm.expect(responseJson.result).to.eql(\"refreshed expired token\");\r",
-											"    pm.expect(responseJson.user_id).to.eql(1);\r",
 											"});\r",
 											""
 										],
@@ -1023,7 +927,7 @@
 							"response": []
 						},
 						{
-							"name": "users_who:successful Copy",
+							"name": "users_who:successful",
 							"event": [
 								{
 									"listen": "test",
@@ -1032,10 +936,18 @@
 											"pm.test(\"output as expected\", function () {\r",
 											"    pm.response.to.have.status(200);\r",
 											"    const responseJson = pm.response.json();\r",
+											"    pm.expect(responseJson).to.eql(\r",
+											"\r",
+											"{\r",
+											"    \"result\": \"user is logged in\",\r",
+											"    \"success\": true,\r",
+											"    \"user_id\":1\r",
+											"}    \r",
+											"\r",
+											"    );\r",
+											"    pm.expect(typeof(pm.response.headers.get(\"Authorization\")))\r",
+											"    .to.eql(typeof(\"\"));\r",
 											"    \r",
-											"    pm.expect(responseJson.success).to.eql(true);\r",
-											"    pm.expect(responseJson.result).to.eql(\"user is logged in\");\r",
-											"    pm.expect(responseJson.user_id).to.eql(1);\r",
 											"});\r",
 											""
 										],
@@ -1045,83 +957,13 @@
 							],
 							"request": {
 								"method": "POST",
-								"header": [],
-								"url": {
-									"raw": "{{host}}/users/who",
-									"host": [
-										"{{host}}"
-									],
-									"path": [
-										"users",
-										"who"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "login test Copy",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"output as expected\", function () {\r",
-											"    pm.response.to.have.status(200);\r",
-											"    const responseJson = pm.response.json();\r",
-											"    \r",
-											"    pm.expect(responseJson.success).to.eql(true);\r",
-											"    \r",
-											"    pm.expect(responseJson.result).to.eql(\"logged in successfully\");\r",
-											"    pm.expect(responseJson.user_id).to.eql(1);\r",
-											"});\r",
-											""
-										],
-										"type": "text/javascript"
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjEsImV4cCI6MTYxNDQ1MDQzNC41NzU4MTZ9.t9Cl19rBx3DteIVCj8nZmlT8FXtwpqW_abTN8-MGLOM",
+										"type": "text"
 									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [],
-								"url": {
-									"raw": "{{host}}/users/login/test",
-									"host": [
-										"{{host}}"
-									],
-									"path": [
-										"users",
-										"login",
-										"test"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "users_who:successful Copy 2",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"output as expected\", function () {\r",
-											"    pm.response.to.have.status(200);\r",
-											"    const responseJson = pm.response.json();\r",
-											"    \r",
-											"    pm.expect(responseJson.success).to.eql(true);\r",
-											"    pm.expect(responseJson.result).to.eql(\"user is logged in\");\r",
-											"    pm.expect(responseJson.user_id).to.eql(1);\r",
-											"});\r",
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [],
+								],
 								"url": {
 									"raw": "{{host}}/users/who",
 									"host": [

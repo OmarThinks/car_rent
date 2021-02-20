@@ -11,7 +11,7 @@ from __init__ import db, SECRET
 from models import (NotReceived, User, #Product, Order, #Image,
 	db_drop_and_create_all, populate_tables)
 from auth import (requires_auth, auth_cookie_response ,
-auth_cookie_response_new)
+auth_cookie_response_new, validate_token)
 from flask_cors import CORS
 from pydantic_models import (validate_model_id_pydantic,
 UserPost, UserUpdatePassword, UserLogin#, ProductPost, OrderPost, OrderUpdate
@@ -178,10 +178,16 @@ Tests: test_01_clear_tables
 	def users_who():
 		#This endpoint will tell if the user should pass or not
 		#and if his token expired, it will refresh it
-		if "cantiin" not in request.cookies:
-			abort(401)
+		the_401_error = jsonify({
+			"error": 401,"message": "unauthorized",
+			"success": False})
+		the_401_error.headers.add("Authorization","")
+
+
+		if "Authorization" not in request.headers:
+			return the_401_error,401
 		#Now the cookie exists
-		token = request.cookies["cantiin"]
+		token = request.headers["Authorization"]
 		#print(SECRET,flush=True)
 		#print(request.cookies,flush=True)
 		token_validation = validate_token(
@@ -189,11 +195,11 @@ Tests: test_01_clear_tables
 		#print(token_validation,flush=True)
 		#print("WHO: "+str(token_validation),flush=True)
 		if token_validation["case"]==3:
-			abort(401)
+			return the_401_error,401
+
 		if token_validation["case"]==2:
 			res=jsonify({"success":True})
 			user_id=token_validation["payload"]["uid"]
-			res.set_cookie
 			response=auth_cookie_response(
 				response={"success":True,
 				"result":"refreshed expired token",
@@ -201,9 +207,11 @@ Tests: test_01_clear_tables
 				user_id=user_id)
 			return response
 		else:
-			return jsonify({"success":True,
+			res = jsonify({"success":True,
 				"result":"user is logged in",
 				"user_id":token_validation["payload"]["uid"]})
+			res.headers.add("Authorization",token)
+			return res
 
 
 
