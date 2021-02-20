@@ -3,7 +3,7 @@ import {Component} from "react";
 class Navbar extends Component {
 
   render = () => {
-    const logged_in = this.probe.logged_in;
+    const logged_in = this.props.logged_in;
     if(logged_in){
       return (
         <div>
@@ -18,3 +18,5 @@ class Navbar extends Component {
     )
   }
 }
+
+export default Navbar;
