@@ -2,7 +2,8 @@ import './App.css';
 import axios from 'axios';
 import $ from "jquery";
 import {Component} from "react";
-import Navbar from "./components/navbar";
+import Navbar from "./routes/navbar";
+import Login from "./routes/login";
 
 class App extends Component {
 
@@ -31,6 +32,7 @@ render = () => {
       <Navbar appState={this.state} />
       <p>{loggedInMessage}</p>
       <button onClick={()=>{this.changeLoggedIn(true)}}>Log me in</button>
+      <Login />
     </div>
   );}
 }
