@@ -631,6 +631,8 @@
 											"    \r",
 											"    pm.expect(responseJson.result).to.eql(\"logged in successfully\");\r",
 											"    pm.expect(responseJson.user_id).to.eql(3);\r",
+											"    pm.expect(typeof(pm.response.headers.get(\"Authorization\")))\r",
+											"    .to.eql(typeof(\"abc\"));\r",
 											"});\r",
 											""
 										],
