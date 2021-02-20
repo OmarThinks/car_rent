@@ -240,13 +240,14 @@ def auth_cookie_response(response,user_id,exp=None):
     cookie_value = generate_token(
         user_id=user_id,secret=SECRET)["result"]
     if exp==None:
-        response.set_cookie('cantiin',
-        value=cookie_value,httponly=True, samesite='Lax',
-        expires=datetime.now()+EXPIRATION_AFTER)
+        response.headers.add('Authorization',cookie_value
+        #,httponly=True, samesite='Lax',
+        #expires=datetime.now()+EXPIRATION_AFTER
+        )
     else:
-        response.set_cookie('cantiin',
-        value=cookie_value,httponly=True,
-         samesite='Lax',expires=exp)
+        response.headers.add('Authorization',cookie_value
+        #,httponly=True,samesite='Lax',expires=exp
+        )
     return response
 
 def auth_cookie_response_new(response,user_id,exp=None):
@@ -256,25 +257,25 @@ def auth_cookie_response_new(response,user_id,exp=None):
     if exp==None:
         print("case 1", flush=True)
         response.headers.add("Authorization",cookie_value)
-        response.set_cookie('cantiin',
-        value=cookie_value,httponly=False, samesite='Lax',
-        expires=datetime.now()+EXPIRATION_AFTER)
+        response.headers.add('Authorization',cookie_value
+        #,httponly=False, samesite='Lax',
+        #expires=datetime.now()+EXPIRATION_AFTER
+        )
     else:
-        response.headers.add("Authorization",
-			cookie_value)
-        response.set_cookie('cantiin',
-        value=cookie_value,httponly=False,
-        samesite='Lax',expires=exp)
+        response.headers.add("Authorization",cookie_value)
+        response.headers.add('Authorization',cookie_value
+        #,httponly=False,samesite='Lax',expires=exp
+        )
     return response
 
 
 
 
 def cookie_auth():
-    if "cantiin" not in request.cookies:
+    if "Authorization" not in request.headers:
         abort(401)
     #Now the cookie exists
-    token = request.cookies["cantiin"]
+    token = request.headers["Authorization"]
     token_validation = validate_token(token=token,secret=SECRET)
     #print(token_validation["case"],flush=True)
     #print(token_validation,flush=True)
@@ -297,13 +298,13 @@ def get_token_auth_cookie():
     """Obtains the Access Token from the Authorization Cookie
     """
 
-    auth = request.cookies.get("cantiin", None)
+    auth = request.headers.get("Authorization", None)
     if not auth:
 
         abort(401)
-        raise AuthError({"code": "authorization_cookie_missing",
+        raise AuthError({"code": "authorization_missing",
                         "description":
-                            "Authorization cookie is expected"}, 401)
+                            "Authorization is expected"}, 401)
 
     parts = auth.split()
 
