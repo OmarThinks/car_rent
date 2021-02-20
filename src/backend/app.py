@@ -14,7 +14,7 @@ from auth import (requires_auth, auth_cookie_response ,
 auth_cookie_response_new)
 from flask_cors import CORS
 from pydantic_models import (validate_model_id_pydantic,
-UserPost, UserUpdatePassword#, ProductPost, OrderPost, OrderUpdate
+UserPost, UserUpdatePassword, UserLogin#, ProductPost, OrderPost, OrderUpdate
 )
 from flask_pydantic import validate
 from functions import validate_model_id
@@ -292,67 +292,9 @@ Tests: test_01_clear_tables
 
 
 	@app.route("/users/login", methods=["POST"])
-	def login_users():
+	@validate()
+	def login_users(body:UserLogin):
 	#This endpoint will log the user in
-		try:
-			body = request.get_json()
-		except:
-			abort(make_response(jsonify(
-			{"description":"request body can not be parsed to json",
-			"message":"bad request"}),400))
-			#return my_error(status=400,
-			#	description="request body can not be parsed to json")
-		try:
-			username = body.get("username",None)
-			password = body.get("password",None)
-		except:
-			abort(make_response(jsonify(
-			{"description":"there is no request body",
-			"message":"bad request"}),400))
-			#return my_error(status=400,
-			#	description = "there is no request body")
-
-		#Validating inputs one by one
-		username_validation = validate_must(
-			input=username,type="s",input_name_string="username",
-			minimum=2,maximum=150)
-		password_validation = validate_must(
-			input=password,type="s",input_name_string="password",
-			minimum=8,maximum=150)
-
-		#Validating inputs a group
-		val_group=validate_must_group(
-			[username_validation,password_validation])
-
-		#Now we will validate all inputs as a group
-		if val_group["case"] == True:
-			# Success: they pass the conditions
-			username,password=val_group["result"]
-		else:
-			# Failure: Something went wrong
-			return val_group["result"]
-		#Now we have username, password and password2 as strings
-
-		users=User.query.all()
-
-		#Validate that this username and password are correct
-		all_users=User.query.all()
-		the_user_id="";
-
-		for usr in all_users:
-			if (str(usr.username) == str(username) and
-				str(usr.password) == str(password)):
-				the_user_id=usr.id # Here we go the user id
-				break
-
-		if the_user_id=="":
-			abort(make_response(jsonify(
-			{"description":"wrong username or password",
-			"message":"unprocessible"}),422))
-			#return my_error(status=422,
-			#	description="wrong username or password")
-		#now we have the_user_id as integer
-
 
 		response=auth_cookie_response(
 			response={"success":True,

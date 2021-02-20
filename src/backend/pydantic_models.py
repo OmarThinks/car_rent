@@ -121,7 +121,8 @@ class UserLogin(BaseModel):
 				break
 		if the_user_id=="":
 			raise ValueError('wrong username or password')
-		return value
+		# The Id will be passed to avoid redununt username search
+		return the_user_id
 
 
 class UserUpdatePassword(BaseModel):
