@@ -41,4 +41,5 @@
 .red_text
 {
   color:red;
+  display: inline-block;
 }
