@@ -10,15 +10,22 @@ class Login extends Component {
     password:"",
     errors:
     {
-      username:"u test",
-      password:"p test"
+      username:"mistake",
+      password:"midtaaaake"
     }
   }
 
   handleChange = (e) =>{
+    console.log(e.target.id);
+    console.log(typeof(e.target.id));
+    let location = "errors." + e.target.id.toString();
+    var errors = {...this.state.errors}
+    errors[e.target.id] = "";
     this.setState({
-      [e.target.id]:e.target.value
+      [e.target.id]:e.target.value,
+      errors
     })
+    console.log(this.state);
   }
 
   handleSubmit = (e) => {
