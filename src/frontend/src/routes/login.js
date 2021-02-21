@@ -1,6 +1,7 @@
 import {Component} from "react";
 import {loginUsers} from "../server_requests/users.js";
 import {handleFailure} from "../functions/handleForm.js";
+import {setCookie, getCookie, eraseCookie} from "../functions/cookies.js";
 
 
 class Login extends Component {
@@ -37,10 +38,11 @@ class Login extends Component {
 
     loginUsers(username,password)
     .then((data)=>{
-      console.log(data);
+      //console.log(data);
       let authHeader = data.headers.authorization;
-      console.log(authHeader);
-      console.log("success");
+      //console.log(authHeader);
+      //console.log("success");
+      setCookie("react_flask_project", authHeader, 7);
     })
     .catch((response) => {handleFailure(response,this);
       })
