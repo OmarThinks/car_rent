@@ -1,13 +1,19 @@
 import {Component} from "react";
+import {eraseCookie} from "../functions/cookies.js";
+
+const logOut = () =>{
+  eraseCookie();
+
+}
+
 
 const Navbar = (props) => {
 
-    const loggedIn = props.appState.loggedIn;
+    const loggedIn = props.appComponent.state.loggedIn;
     if(loggedIn==true){
       return (
         <div>
-        <button>Log Out</button>
-        <button>Create Account</button>
+        <button onClick={()=>{logOut()}}>Log Out</button>
         </div>
       )
     }

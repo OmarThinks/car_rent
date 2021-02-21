@@ -1,14 +1,21 @@
-function setCookie(name,value,days) {
+const cookieName = "react_flask_project"
+
+function setCookie(value,days) {
+    var name = cookieName;
+    //console.log(name);
     var expires = "";
     if (days) {
         var date = new Date();
         date.setTime(date.getTime() + (days*24*60*60*1000));
         expires = "; expires=" + date.toUTCString();
     }
-    document.cookie = name + "=" + (value || "")  + expires + "; path=/"
-    +"; samesite=lax";
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/;"+
+    "samesite=lax";
 }
-function getCookie(name) {
+
+
+function getCookie() {
+    var name = cookieName;
     var nameEQ = name + "=";
     var ca = document.cookie.split(';');
     for(var i=0;i < ca.length;i++) {
@@ -18,7 +25,8 @@ function getCookie(name) {
     }
     return null;
 }
-function eraseCookie(name) {
+function eraseCookie() {
+    var name = cookieName;
     document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
 
