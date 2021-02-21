@@ -1,4 +1,4 @@
-//import './App.css';
+import './App.css';
 import axios from 'axios';
 import $ from "jquery";
 import {Component} from "react";
