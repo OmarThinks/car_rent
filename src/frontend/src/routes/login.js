@@ -3,14 +3,25 @@ import {Component} from "react";
 class Login extends Component {
 
   state = {
-    userName:"",
+    username:"",
     password:""
+  }
+
+  handleChange = (e) =>{
+    this.setState({
+      [e.target.id]:e.target.value
+    })
   }
     render = () =>{
       return(
-          <form>
-            <input type="text"></input>
-          </form>
+
+        <form>
+          Username: <input type="text" id="username"
+          onChange={(e)=>{this.handleChange(e)}}></input><br/>
+          Password: <input type="text" id="password"
+          onChange={(e)=>{this.handleChange(e)}}></input><br/>
+        <button type="submit"> Login </button>
+        </form>
         )
     }
 }
