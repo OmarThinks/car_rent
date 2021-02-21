@@ -4,7 +4,9 @@ class Login extends Component {
 
   state = {
     username:"",
-    password:""
+    password:"",
+    usernameError:"username error",
+    passwordError:"password error"
   }
 
   handleChange = (e) =>{
@@ -27,10 +29,14 @@ class Login extends Component {
     render = () =>{
       return(
         <form onSubmit={(e)=>{this.handleSubmit(e)}}>
-          Username: <input type="text" id="username"
-          onChange={(e)=>{this.handleChange(e)}}></input><br/>
-          Password: <input type="text" id="password"
-          onChange={(e)=>{this.handleChange(e)}}></input><br/>
+          Username*: <input type="text" id="username"
+          onChange={(e)=>{this.handleChange(e)}}></input>
+        <span>{this.state.usernameError}</span>
+      <br/>
+          Password*: <input type="text" id="password"
+          onChange={(e)=>{this.handleChange(e)}}></input>
+        <span>{this.state.passwordError}</span>
+      <br/>
         <button type="submit"> Login </button>
         </form>
         )
