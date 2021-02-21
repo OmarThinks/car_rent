@@ -12,10 +12,14 @@ class Login extends Component {
       [e.target.id]:e.target.value
     })
   }
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(this.state);
+  }
     render = () =>{
       return(
-
-        <form>
+        <form onSubmit={(e)=>{this.handleSubmit(e)}}>
           Username: <input type="text" id="username"
           onChange={(e)=>{this.handleChange(e)}}></input><br/>
           Password: <input type="text" id="password"
