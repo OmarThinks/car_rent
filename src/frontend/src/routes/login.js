@@ -15,7 +15,14 @@ class Login extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    console.log(this.state);
+    let username = ths.state.username;
+    let password = ths.state.password;
+    console.log("username is : " + username.toString());
+    console.log("password is : " + password.toString());
+
+    loginUsers(username,password)
+    .then()
+    .catch();
   }
     render = () =>{
       return(

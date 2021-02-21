@@ -4,7 +4,7 @@ import host from "./host";
 console.log(host);
 
 var loginUsers = (username,password) => {
-  return new axios({
+  return axios({
     method: 'post',
     url: host+'/users/login',
     data:
@@ -14,8 +14,5 @@ var loginUsers = (username,password) => {
     }
   });
 }
-
-//module.exports={"loginUsers":loginUsers};
-//module.exports.loginUsers = loginUsers;
 
 export {loginUsers as loginUsers};
