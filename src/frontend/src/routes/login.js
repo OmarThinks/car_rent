@@ -10,14 +10,14 @@ class Login extends Component {
     password:"",
     errors:
     {
-      username:"mistake",
-      password:"midtaaaake"
+      username:"",
+      password:""
     }
   }
 
   handleChange = (e) =>{
-    console.log(e.target.id);
-    console.log(typeof(e.target.id));
+    //console.log(e.target.id);
+    //console.log(typeof(e.target.id));
     let location = "errors." + e.target.id.toString();
     var errors = {...this.state.errors}
     errors[e.target.id] = "";
@@ -25,7 +25,7 @@ class Login extends Component {
       [e.target.id]:e.target.value,
       errors
     })
-    console.log(this.state);
+    //console.log(this.state);
   }
 
   handleSubmit = (e) => {
@@ -36,8 +36,12 @@ class Login extends Component {
     //console.log("password is : " + password.toString());
 
     loginUsers(username,password)
-    .then((data)=>{//console.log(data);
-      console.log("success");})
+    .then((data)=>{
+      console.log(data);
+      let authHeader = data.headers.authorization;
+      console.log(authHeader);
+      console.log("success");
+    })
     .catch((response) => {handleFailure(response,this);
       })
     }

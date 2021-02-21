@@ -1,19 +1,19 @@
 var handleFailure = (response,parentObject) =>
 {
-  console.log("handle failure");
+  //console.log("handle failure");
   let errorCleaned = digestErrorResponse(response);
-  console.log(errorCleaned);
-  console.log(parentObject.state);
+  //console.log(errorCleaned);
+  //console.log(parentObject.state);
   let newErrors = {};
   for(let property in parentObject.state.errors)
   {newErrors[property] = "";}
-  console.log(newErrors);
+  //console.log(newErrors);
   /*newErrors now looks like this:
     {username:"",password:""}
   */
   for(let property in errorCleaned)
   {newErrors[property] = errorCleaned[property];}
-  console.log(newErrors);
+  //console.log(newErrors);
   parentObject.setState({errors:newErrors})
 }
 
