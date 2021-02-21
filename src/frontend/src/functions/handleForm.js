@@ -1,7 +1,20 @@
-var handleFailure = (response) =>
+var handleFailure = (response,parentObject) =>
 {
   console.log("handle failure");
-  digestErrorResponse(response)
+  let errorCleaned = digestErrorResponse(response);
+  console.log(errorCleaned);
+  console.log(parentObject.state);
+  let newErrors = {};
+  for(let property in parentObject.state.errors)
+  {newErrors[property] = "";}
+  console.log(newErrors);
+  /*newErrors now looks like this:
+    {username:"",password:""}
+  */
+  for(let property in errorCleaned)
+  {newErrors[property] = errorCleaned[property];}
+  console.log(newErrors);
+  parentObject.setState({errors:newErrors})
 }
 
 
@@ -24,23 +37,17 @@ OUTPUT:
 var digestErrorResponse = (response) =>
 {
   let responseBody = response.response.data.validation_error.body_params;
-  console.log(responseBody);
-
+  //console.log(responseBody);
   const toReturn = {};
   responseBody.map(errorObject => {
-
-    console.log(errorObject);
+    //console.log(errorObject);
     let errorLocation = errorObject.loc[0];
     let errorMessage = errorObject.msg;
-    console.log(errorLocation);
-    console.log(errorMessage);
-    //console.log(errorObject.loc[0]);
-    //console.log(errorObject.msg);
-    //return({location: errorLocation, message: errorMessage})
+    //console.log(errorLocation);
+    //console.log(errorMessage);
     toReturn[errorLocation] = errorMessage;
   })
-    //return((errorObject))
-  console.log(toReturn);
+  //console.log(toReturn);
   return toReturn;
 }
 
