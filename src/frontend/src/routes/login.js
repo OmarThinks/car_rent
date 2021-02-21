@@ -15,14 +15,14 @@ class Login extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    let username = ths.state.username;
-    let password = ths.state.password;
+    let username = this.state.username;
+    let password = this.state.password;
     console.log("username is : " + username.toString());
     console.log("password is : " + password.toString());
 
     loginUsers(username,password)
-    .then()
-    .catch();
+    .then((data)=>{console.log(data);})
+    .catch((failure) => {console.log(failure.response);})
   }
     render = () =>{
       return(

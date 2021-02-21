@@ -1,7 +1,7 @@
 import axios from 'axios';
 import host from "./host";
 
-console.log(host);
+//console.log(host);
 
 var loginUsers = (username,password) => {
   return axios({
