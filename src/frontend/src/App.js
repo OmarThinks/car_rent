@@ -33,10 +33,6 @@ componentDidMount(){
 
 
 render = () => {
-  /*var loggedInMessage = "User is not logged in";
-  if (this.state.loggedIn) {
-    loggedInMessage = "User is logged in";
-  }*/
   let cookieValue = getCookie();
   return (
     <div className="App">
