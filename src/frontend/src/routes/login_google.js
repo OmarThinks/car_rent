@@ -6,6 +6,8 @@ import {setCookie, eraseCookie} from "../functions/cookies.js";
 import { TextField, InputAdornment, IconButton } from "@material-ui/core";
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+import { Button } from '@material-ui/core';
+
 
 const logOut = (props) =>{
   eraseCookie();
@@ -71,8 +73,10 @@ class Login extends Component {
       if (this.props.appComponent.state.loggedIn == true)
       {
         return(
-      <div>
-        <button onClick={(e)=>{logOut(this.props)}}>Log Out</button>
+      <div>      
+<Button variant="contained" color="secondary" size="large" onClick={(e)=>{logOut(this.props)}}>
+  Log Out
+</Button>
       </div>
         )
       }
@@ -91,7 +95,7 @@ class Login extends Component {
       return(
 <div>
 
-        <form  onSubmit={(e)=>{this.handleSubmit(e)}}>
+        <form  onSubmit={(e)=>{this.handleSubmit(e)}} noValidate >
       <TextField id="username" label="Username" variant="outlined" error={usernameError} 
           helperText={this.state.errors.username} required={true}
            margin="normal" defaultValue="" fullWidth={true}
@@ -115,7 +119,10 @@ class Login extends Component {
     )
   }}
           />
-        <button type="submit"> Login </button>
+
+<Button type="submit" variant="contained" color="primary" size="large">
+  Login
+</Button>
       </form>
 </div>
         )
