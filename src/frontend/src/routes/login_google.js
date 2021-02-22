@@ -18,6 +18,7 @@ class Login extends Component {
   state = {
     username:"",
     password:"",
+    showPassword:false,
     errors:
     {
       username:"",
@@ -76,25 +77,25 @@ class Login extends Component {
         {usernameError = true ;}
       if (this.state.errors.password != "") 
         {passwordError = true ;}
+
+      let passwordType="password";
+      if(this.state.showPassword==true)
+        {passwordType="text";}
+
       return(
 <div>
 
-        <form onSubmit={(e)=>{this.handleSubmit(e)}}>
+        <form  onSubmit={(e)=>{this.handleSubmit(e)}}>
       <TextField id="username" label="Username" variant="outlined" error={usernameError} 
           helperText={this.state.errors.username} required={true}
            margin="normal" defaultValue="" fullWidth={true}
            onChange={(e)=>{this.handleChange(e)}}/>
-      <TextField id="password" label="Password" variant="outlined" error={passwordError} 
+      <TextField id="password" type={passwordType} label="Password" variant="outlined" error={passwordError} 
           helperText={this.state.errors.password} required={true}
           margin="normal" defaultValue="" fullWidth={true}
           onChange={(e)=>{this.handleChange(e)}}/>
         <button type="submit"> Login </button>
-        </form>
-  <div>
-    <form>
-
-    </form>
-  </div>
+      </form>
 </div>
         )
     }
