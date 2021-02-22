@@ -3,7 +3,7 @@ import axios from 'axios';
 import $ from "jquery";
 import {Component} from "react";
 import Navbar from "./routes/navbar";
-import Login from "./routes/login";
+import Login from "./routes/login_google";
 import {getCookie} from "./functions/cookies.js";
 
 class App extends Component {

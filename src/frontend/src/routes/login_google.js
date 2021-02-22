@@ -2,7 +2,7 @@ import {Component} from "react";
 import {loginUsers} from "../server_requests/users.js";
 import {handleFailure} from "../functions/handleForm.js";
 import {setCookie, eraseCookie} from "../functions/cookies.js";
-
+import { TextField } from '@material-ui/core';
 
 
 const logOut = (props) =>{
@@ -60,7 +60,7 @@ class Login extends Component {
 
 
     render = () =>{
-      //console.log(this.props);
+      //console.log("google");
       if (this.props.appComponent.state.loggedIn == true)
       {
         return(
@@ -69,7 +69,16 @@ class Login extends Component {
       </div>
         )
       }
+
+      let usernameError = false;
+      let passwordError = false;
+      if (this.state.errors.username != "") 
+        {usernameError = true ;}
+      if (this.state.errors.password != "") 
+        {passwordError = true ;}
       return(
+<div>
+
         <form onSubmit={(e)=>{this.handleSubmit(e)}}>
           Username
           <span className="red_text">*
@@ -84,6 +93,15 @@ class Login extends Component {
       <br/>
         <button type="submit"> Login </button>
         </form>
+  <div>
+    <form>
+      <TextField id="username" label="Username" variant="outlined" error={usernameError} 
+          helperText={this.state.errors.username} required={true}/>
+      <TextField id="ppassword" label="Password" variant="outlined" error={passwordError} 
+          helperText={this.state.errors.password} required={true}/>
+    </form>
+  </div>
+</div>
         )
     }
 }

@@ -4,7 +4,6 @@ import {handleFailure} from "../functions/handleForm.js";
 import {setCookie, eraseCookie} from "../functions/cookies.js";
 
 
-
 const logOut = (props) =>{
   eraseCookie();
   //console.log(props);
@@ -70,6 +69,7 @@ class Login extends Component {
         )
       }
       return(
+<div>
         <form onSubmit={(e)=>{this.handleSubmit(e)}}>
           Username
           <span className="red_text">*
@@ -84,6 +84,12 @@ class Login extends Component {
       <br/>
         <button type="submit"> Login </button>
         </form>
+
+
+
+</div>
+
+
         )
     }
 }
