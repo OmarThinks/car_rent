@@ -96,9 +96,11 @@ class Login extends Component {
   <div>
     <form>
       <TextField id="username" label="Username" variant="outlined" error={usernameError} 
-          helperText={this.state.errors.username} required={true}/>
+          helperText={this.state.errors.username} required={true}
+           margin="normal"/>
       <TextField id="ppassword" label="Password" variant="outlined" error={passwordError} 
-          helperText={this.state.errors.password} required={true}/>
+          helperText={this.state.errors.password} required={true}
+          margin="normal" defaultValue=""/>
     </form>
   </div>
 </div>
