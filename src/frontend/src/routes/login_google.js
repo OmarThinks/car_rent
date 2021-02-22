@@ -80,27 +80,19 @@ class Login extends Component {
 <div>
 
         <form onSubmit={(e)=>{this.handleSubmit(e)}}>
-          Username
-          <span className="red_text">*
-          </span> : <input type="text" id="username"
-          onChange={(e)=>{this.handleChange(e)}}></input>
-        <div className="red_text">{this.state.errors.username}</div>
-      <br/>
-          Password<span className="red_text">*</span> : <input
-           type="text" id="password"
-          onChange={(e)=>{this.handleChange(e)}}></input>
-        <span className="red_text">{this.state.errors.password}</span>
-      <br/>
+      <TextField id="username" label="Username" variant="outlined" error={usernameError} 
+          helperText={this.state.errors.username} required={true}
+           margin="normal" defaultValue="" fullWidth={true}
+           onChange={(e)=>{this.handleChange(e)}}/>
+      <TextField id="password" label="Password" variant="outlined" error={passwordError} 
+          helperText={this.state.errors.password} required={true}
+          margin="normal" defaultValue="" fullWidth={true}
+          onChange={(e)=>{this.handleChange(e)}}/>
         <button type="submit"> Login </button>
         </form>
   <div>
     <form>
-      <TextField id="username" label="Username" variant="outlined" error={usernameError} 
-          helperText={this.state.errors.username} required={true}
-           margin="normal"/>
-      <TextField id="ppassword" label="Password" variant="outlined" error={passwordError} 
-          helperText={this.state.errors.password} required={true}
-          margin="normal" defaultValue=""/>
+
     </form>
   </div>
 </div>
