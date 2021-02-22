@@ -1,7 +1,16 @@
 import {Component} from "react";
 import {loginUsers} from "../server_requests/users.js";
 import {handleFailure} from "../functions/handleForm.js";
-import {setCookie} from "../functions/cookies.js";
+import {setCookie, eraseCookie} from "../functions/cookies.js";
+
+
+
+const logOut = (props) =>{
+  eraseCookie();
+  //console.log(props);
+  props.appComponent.setState({loggedIn:false});
+}
+
 
 
 class Login extends Component {
@@ -51,6 +60,15 @@ class Login extends Component {
 
 
     render = () =>{
+      //console.log(this.props);
+      if (this.props.appComponent.state.loggedIn == true)
+      {
+        return(
+      <div>
+        <button onClick={(e)=>{logOut(this.props)}}>Log Out</button>
+      </div>
+        )
+      }
       return(
         <form onSubmit={(e)=>{this.handleSubmit(e)}}>
           Username

@@ -24,7 +24,7 @@ changeLoggedIn = (newState) =>{
 
 componentDidMount(){
   let cookie = getCookie();
-  console.log(getCookie());
+  //console.log(getCookie());
   if(cookie){
     this.setState({loggedIn:true})
   }
@@ -33,17 +33,15 @@ componentDidMount(){
 
 
 render = () => {
-  var loggedInMessage = "User is not logged in";
+  /*var loggedInMessage = "User is not logged in";
   if (this.state.loggedIn) {
     loggedInMessage = "User is logged in";
-  }
+  }*/
   let cookieValue = getCookie();
   return (
     <div className="App">
       <Navbar appComponent={this} />
-      <p>{loggedInMessage}</p>
       <p>Cookie Value is: {cookieValue}</p>
-      <button onClick={()=>{this.changeLoggedIn(true)}}>Log me in</button>
       
       <Login appComponent={this}/>
     </div>
