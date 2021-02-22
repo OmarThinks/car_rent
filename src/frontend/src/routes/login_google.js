@@ -2,8 +2,10 @@ import {Component} from "react";
 import {loginUsers} from "../server_requests/users.js";
 import {handleFailure} from "../functions/handleForm.js";
 import {setCookie, eraseCookie} from "../functions/cookies.js";
-import { TextField } from '@material-ui/core';
-
+//import { TextField } from '@material-ui/core';
+import { TextField, InputAdornment, IconButton } from "@material-ui/core";
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 
 const logOut = (props) =>{
   eraseCookie();
@@ -60,6 +62,10 @@ class Login extends Component {
     }
 
 
+    changePasswordShow(e){
+      this.setState({showPassword:!this.state.showPassword});
+    }
+
     render = () =>{
       //console.log("google");
       if (this.props.appComponent.state.loggedIn == true)
@@ -93,7 +99,22 @@ class Login extends Component {
       <TextField id="password" type={passwordType} label="Password" variant="outlined" error={passwordError} 
           helperText={this.state.errors.password} required={true}
           margin="normal" defaultValue="" fullWidth={true}
-          onChange={(e)=>{this.handleChange(e)}}/>
+          onChange={(e)=>{this.handleChange(e)}}
+          InputProps={{ // <-- This is where the toggle button is added.
+    endAdornment: (
+      <InputAdornment position="end">
+        <IconButton
+          aria-label="toggle password visibility"
+          onClick={(e)=>{this.changePasswordShow()}}
+          //onMouseDown={handleMouseDownPassword}
+        //}
+        >
+          {this.state.showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+        </IconButton>
+      </InputAdornment>
+    )
+  }}
+          />
         <button type="submit"> Login </button>
       </form>
 </div>
