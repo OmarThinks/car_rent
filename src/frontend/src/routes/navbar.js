@@ -1,9 +1,10 @@
 import {Component} from "react";
 import {eraseCookie} from "../functions/cookies.js";
 
-const logOut = () =>{
+const logOut = (props) =>{
   eraseCookie();
-
+  //console.log(props);
+  props.appComponent.setState({loggedIn:false});
 }
 
 
@@ -13,7 +14,7 @@ const Navbar = (props) => {
     if(loggedIn==true){
       return (
         <div>
-        <button onClick={()=>{logOut()}}>Log Out</button>
+        <button onClick={(e)=>{logOut(props)}}>Log Out</button>
         </div>
       )
     }

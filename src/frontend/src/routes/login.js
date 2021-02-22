@@ -27,7 +27,6 @@ class Login extends Component {
       errors
     })
     //console.log(this.state);
-    this.props.appComponent.setState({loggedIn:true});
   }
 
   handleSubmit = (e) => {
@@ -44,6 +43,7 @@ class Login extends Component {
       //console.log(authHeader);
       //console.log("success");
       setCookie(authHeader, 7);
+    this.props.appComponent.setState({loggedIn:true});
     })
     .catch((response) => {handleFailure(response,this);
       })

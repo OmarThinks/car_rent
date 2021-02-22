@@ -44,6 +44,7 @@ render = () => {
       <p>{loggedInMessage}</p>
       <p>Cookie Value is: {cookieValue}</p>
       <button onClick={()=>{this.changeLoggedIn(true)}}>Log me in</button>
+      
       <Login appComponent={this}/>
     </div>
   );}
